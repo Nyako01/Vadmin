@@ -11,3 +11,5 @@ This is a tool to easily manage server fivem
 ## ScreenShot
 ![Screenshot_42](https://user-images.githubusercontent.com/30838114/58843041-0d239780-869b-11e9-8aef-00940ad4bcb8.png)
 
+## Download
+to download this tool. you can go to [Release](https://github.com/Oky12/FivemServerManager/releases) and download latest version
