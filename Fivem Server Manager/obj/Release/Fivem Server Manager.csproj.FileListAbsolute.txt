@@ -6,3 +6,11 @@ C:\Users\OKY DNP\Documents\Fivem Server Manager\Fivem Server Manager\obj\Release
 C:\Users\OKY DNP\Documents\Fivem Server Manager\Fivem Server Manager\obj\Release\Fivem Server Manager.csproj.CoreCompileInputs.cache
 C:\Users\OKY DNP\Documents\Fivem Server Manager\Fivem Server Manager\obj\Release\Fivem Server Manager.exe
 C:\Users\OKY DNP\Documents\Fivem Server Manager\Fivem Server Manager\obj\Release\Fivem Server Manager.pdb
+C:\Users\okisu\Documents\GitHub\FivemServerManager\Fivem Server Manager\bin\Release\Fivem Server Manager.exe
+C:\Users\okisu\Documents\GitHub\FivemServerManager\Fivem Server Manager\bin\Release\Fivem Server Manager.pdb
+C:\Users\okisu\Documents\GitHub\FivemServerManager\Fivem Server Manager\obj\Release\Fivem_Server_Manager.Form1.resources
+C:\Users\okisu\Documents\GitHub\FivemServerManager\Fivem Server Manager\obj\Release\Fivem_Server_Manager.Properties.Resources.resources
+C:\Users\okisu\Documents\GitHub\FivemServerManager\Fivem Server Manager\obj\Release\Fivem Server Manager.csproj.GenerateResource.cache
+C:\Users\okisu\Documents\GitHub\FivemServerManager\Fivem Server Manager\obj\Release\Fivem Server Manager.csproj.CoreCompileInputs.cache
+C:\Users\okisu\Documents\GitHub\FivemServerManager\Fivem Server Manager\obj\Release\Fivem Server Manager.exe
+C:\Users\okisu\Documents\GitHub\FivemServerManager\Fivem Server Manager\obj\Release\Fivem Server Manager.pdb

@@ -158,7 +158,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(330, 329);
+            this.textBox1.Size = new System.Drawing.Size(330, 348);
             this.textBox1.TabIndex = 10;
             // 
             // Stop
@@ -906,7 +906,6 @@
             this.SearchText.Name = "SearchText";
             this.SearchText.Size = new System.Drawing.Size(113, 20);
             this.SearchText.TabIndex = 3;
-            this.SearchText.Text = "Search Resources";
             // 
             // linkLabel1
             // 
@@ -933,7 +932,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(374, 447);
+            this.ClientSize = new System.Drawing.Size(372, 447);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.Stop);
             this.Controls.Add(this.Start);

@@ -48,9 +48,14 @@ namespace Fivem_Server_Manager
         public Form1()
         {
             InitializeComponent();
+            MessageBox.Show("This Program Created By DroidNetPC \r\n"
+                + "Github: Oky12 \r\n", "Credit", MessageBoxButtons.OK, MessageBoxIcon.Information
+                
+                );
+
             ReadConfig();
             CheckProcess();
-
+           
             Thread T = new Thread(Time);
             T.Start();
 
@@ -170,7 +175,7 @@ namespace Fivem_Server_Manager
             int EndLineResource = GetIndex(file, endTag);
             if (StartLineResource == 0 || EndLineResource == 0)
             {
-                MessageBox.Show(startTag + " or " + endTag + " Tag not found inside " + FileConfigServer);
+                MessageBox.Show(startTag + " or " + endTag + " Tag not found inside " + FileConfigServer, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
@@ -207,76 +212,92 @@ namespace Fivem_Server_Manager
         
         void ReadConfig()
         {
-            int indexDB = GetIndex(FileConfigServer, "set mysql_connection_string");
-            String DataDB = GetLine(FileConfigServer, indexDB);
-            int lenghDataDB = DataDB.Length;
-            int indexServer = DataDB.IndexOf("server");
-            int indexDatabase = DataDB.IndexOf("database");
-            int indexUsername = DataDB.IndexOf("userid");
-            int indexPassword = DataDB.IndexOf("password");
-            int SubLenghtDBS = (indexDatabase - indexServer) - 8;
-            int SubLenghtDBN = (indexUsername - indexDatabase) - 10 ;
-            int SubLenghtDBU = (indexPassword - indexUsername) - 8;
-            int SubLenghtDBP = (lenghDataDB - indexPassword) - 11;
+            if (File.Exists(FileConfigServer) && File.Exists(FileConfigApp))
+            {
+                int indexDB = GetIndex(FileConfigServer, "set mysql_connection_string");
+                if (indexDB != 0)
+                {
+                    String DataDB = GetLine(FileConfigServer, indexDB);
+                    int lenghDataDB = DataDB.Length;
+                    int indexServer = DataDB.IndexOf("server");
+                    int indexDatabase = DataDB.IndexOf("database");
+                    int indexUsername = DataDB.IndexOf("userid");
+                    int indexPassword = DataDB.IndexOf("password");
+                    int SubLenghtDBS = (indexDatabase - indexServer) - 8;
+                    int SubLenghtDBN = (indexUsername - indexDatabase) - 10;
+                    int SubLenghtDBU = (indexPassword - indexUsername) - 8;
+                    int SubLenghtDBP = (lenghDataDB - indexPassword) - 11;
 
-            DatabaseServer = DataDB.Substring(indexServer + 7, SubLenghtDBS);
-            DatabaseName = DataDB.Substring(indexDatabase + 9, SubLenghtDBN);
-            DatabaseUser = DataDB.Substring(indexUsername + 7, SubLenghtDBU);
-            DatabasePass = DataDB.Substring(indexPassword + 9, SubLenghtDBP);
+                    DatabaseServer = DataDB.Substring(indexServer + 7, SubLenghtDBS);
+                    DatabaseName = DataDB.Substring(indexDatabase + 9, SubLenghtDBN);
+                    DatabaseUser = DataDB.Substring(indexUsername + 7, SubLenghtDBU);
+                    DatabasePass = DataDB.Substring(indexPassword + 9, SubLenghtDBP);
 
-            ServerName = GetData(FileConfigServer, "sv_hostname", 13, true);
-            MaxClient = GetData(FileConfigServer, "sv_maxclients", 14, false);
-            License = GetData(FileConfigServer, "sv_licenseKey", 14, false);
-            Udp = GetData(FileConfigServer, "endpoint_add_udp", 18, true);
-            Tcp = GetData(FileConfigServer, "endpoint_add_tcp", 18, true);
-            IconFile = GetData(FileConfigServer, "load_server_icon", 17, false);
-            SchHour1 = GetData(FileConfigApp, "Schedule1_H", 14, false);
-            SchMinute1 = GetData(FileConfigApp, "Schedule1_M", 14, false);
-            SchHour2 = GetData(FileConfigApp, "Schedule2_H", 14, false);
-            SchMinute2 = GetData(FileConfigApp, "Schedule2_M", 14, false);
-            SchHour3 = GetData(FileConfigApp, "Schedule3_H", 14, false);
-            SchMinute3 = GetData(FileConfigApp, "Schedule3_M", 14, false);
+                    DbPass.Text = DatabasePass;
+                    DbUser.Text = DatabaseUser;
+                    DbName.Text = DatabaseName;
+                    DbServer.Text = DatabaseServer;
+                }
+                ServerName = GetData(FileConfigServer, "sv_hostname", 13, true);
+                MaxClient = GetData(FileConfigServer, "sv_maxclients", 14, false);
+                License = GetData(FileConfigServer, "sv_licenseKey", 14, false);
+                Udp = GetData(FileConfigServer, "endpoint_add_udp", 18, true);
+                Tcp = GetData(FileConfigServer, "endpoint_add_tcp", 18, true);
+                IconFile = GetData(FileConfigServer, "load_server_icon", 17, false);
+                SchHour1 = GetData(FileConfigApp, "Schedule1_H", 14, false);
+                SchMinute1 = GetData(FileConfigApp, "Schedule1_M", 14, false);
+                SchHour2 = GetData(FileConfigApp, "Schedule2_H", 14, false);
+                SchMinute2 = GetData(FileConfigApp, "Schedule2_M", 14, false);
+                SchHour3 = GetData(FileConfigApp, "Schedule3_H", 14, false);
+                SchMinute3 = GetData(FileConfigApp, "Schedule3_M", 14, false);
 
-            checkedListBox1.Items.Clear();
-            ScanResource(FileConfigServer, "#System", "#endSystem");
-            ScanResource(FileConfigServer, "#InESXFolder", "#endInESXFolder");
-            ScanResource(FileConfigServer, "#OutESXFolder", "#endOutESXFolder");
-            ScanResource(FileConfigServer, "#Addons", "#endAddons");
+                checkedListBox1.Items.Clear();
+                ScanResource(FileConfigServer, "#System", "#endSystem");
+                ScanResource(FileConfigServer, "#InESXFolder", "#endInESXFolder");
+                ScanResource(FileConfigServer, "#OutESXFolder", "#endOutESXFolder");
+                ScanResource(FileConfigServer, "#Addons", "#endAddons");
 
-            DbPass.Text = DatabasePass;
-            DbUser.Text = DatabaseUser;
-            DbName.Text = DatabaseName;
-            DbServer.Text = DatabaseServer;
-            ICON.Text = IconFile;
-            Key.Text = License;
-            TCP.Text = Tcp;
-            UDP.Text = Udp;
-            MAXC.Text = MaxClient;
-            Server_Name.Text = ServerName;
-            Hour1.Text = SchHour1;
-            Minute1.Text = SchMinute1;
-            Hour2.Text = SchHour2;
-            Minute2.Text = SchMinute2;
-            Hour3.Text = SchHour3;
-            Minute3.Text = SchMinute3;
+                
+                ICON.Text = IconFile;
+                Key.Text = License;
+                TCP.Text = Tcp;
+                UDP.Text = Udp;
+                MAXC.Text = MaxClient;
+                Server_Name.Text = ServerName;
+                Hour1.Text = SchHour1;
+                Minute1.Text = SchMinute1;
+                Hour2.Text = SchHour2;
+                Minute2.Text = SchMinute2;
+                Hour3.Text = SchHour3;
+                Minute3.Text = SchMinute3;
+            }
+            else
+            {
+                MessageBox.Show("File " + FileConfigApp + " or " + FileConfigServer + " is Missing, Make sure file in same directory", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
+
 
         void start()
         {
+            File.Delete("LOG.txt");
             var proc = new Process();
             proc.StartInfo.FileName = "start_Server.bat";
             proc.StartInfo.UseShellExecute = false;
-            // set up output redirection
+            // set up output redirection           
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.RedirectStandardError = true;
             proc.EnableRaisingEvents = true;
             proc.StartInfo.CreateNoWindow = true;
             // see below for output handler
+            
             proc.ErrorDataReceived += proc_DataReceived;
             proc.OutputDataReceived += proc_DataReceived;
 
             proc.Start();
 
+            
             proc.BeginErrorReadLine();
             proc.BeginOutputReadLine();
 
@@ -287,7 +308,12 @@ namespace Fivem_Server_Manager
         {
             // output will be in string e.Data
             SetText(e.Data);
-            //Console.WriteLine(e.Data);
+            using (StreamWriter sw = File.AppendText("LOG.txt"))
+            {
+                sw.WriteLine("[" + Hour + ":" + Minute + ":" + Second + "]: " + e.Data);
+                
+            }
+            
         }
 
         delegate void SetTextCallback(string text);
@@ -318,7 +344,7 @@ namespace Fivem_Server_Manager
             else
             {
                 this.LTIME.Text = text;
-                //this.LTIME.Update();
+               
             }
         }
 
@@ -431,17 +457,18 @@ namespace Fivem_Server_Manager
             OverWrite(FileConfigServer, "set mysql_connection_string", RawDataDb);
 
             ReadConfig();
-            MessageBox.Show("Configuration Saved");
+            MessageBox.Show("Configuration Saved", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
             apply.Enabled = false;
             change.Enabled = true;
         }
 
         void AutoRestart()
         {          
-                StopProc("FXServer");
-                MessageBox.Show("Restarting");
+            StopProc("FXServer");
+            //MessageBox.Show("Restarting");
             CheckProcess();
-             Thread.Sleep(1000);
+            Directory.Delete("cache", true);
+            Thread.Sleep(1000);
             Thread StartServer = new Thread(start);
             StartServer.Start();
             MessageBox.Show("Restart Success");
@@ -459,7 +486,7 @@ namespace Fivem_Server_Manager
                 if (Hour == Hour1.Text && Minute == Minute1.Text && Schedule1 == true && Schedule1RUN == true)
                 {
                     AutoRestart();
-                    MessageBox.Show("Server Restart On Schedule 1");
+                    MessageBox.Show("Server Restart On Schedule 1", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Schedule1RUN = false;
                 }
                 if (Hour != Hour1.Text || Minute != Minute1.Text)
@@ -470,7 +497,7 @@ namespace Fivem_Server_Manager
                 if (Hour == Hour2.Text && Minute == Minute2.Text && Schedule2 == true && Schedule2RUN == true)
                 {
                     AutoRestart();
-                    MessageBox.Show("Server Restart On Schedule 2");
+                    MessageBox.Show("Server Restart On Schedule 2", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Schedule2RUN = false;
                 }
                 if (Hour != Hour2.Text || Minute != Minute2.Text)
@@ -481,7 +508,7 @@ namespace Fivem_Server_Manager
                 if (Hour == Hour3.Text && Minute == Minute3.Text && Schedule3 == true && Schedule3RUN == true)
                 {
                     AutoRestart();
-                    MessageBox.Show("Server Restart On Schedule 3");
+                    MessageBox.Show("Server Restart On Schedule 3", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Schedule3RUN = false;
                 }
                 if (Hour != Hour3.Text || Minute != Minute3.Text)
@@ -529,9 +556,9 @@ namespace Fivem_Server_Manager
                 CheckProcess();
                 if (!isrunning)
                 {
-                 MessageBox.Show("Server Failed to Start"); }
+                 MessageBox.Show("Server Failed to Start", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
             }
-            else { MessageBox.Show("start_server.bat not found. make sure file in same directory"); }
+            else { MessageBox.Show("start_server.bat not found. make sure file in same directory", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
         }
 
         private void TextBox1_TextChanged(object sender, EventArgs e)
@@ -542,6 +569,7 @@ namespace Fivem_Server_Manager
         private void Button4_Click(object sender, EventArgs e)
         {
             StopProc("FXServer");
+            
             Thread.Sleep(500);
             CheckProcess();
             
@@ -616,7 +644,7 @@ namespace Fivem_Server_Manager
             lineChanger("Schedule1_M = " + Minute1.Text, "Config.cfg", 3);
             SchHour1 = Hour1.Text;
             SchMinute1 = Minute1.Text;
-            MessageBox.Show("Schedule 1 Saved");
+            MessageBox.Show("Schedule 1 Saved", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void ApplySch2_Click_1(object sender, EventArgs e)
@@ -629,7 +657,7 @@ namespace Fivem_Server_Manager
             lineChanger("Schedule2_M = " + Minute2.Text, "Config.cfg", 5);
             SchHour2 = Hour2.Text;
             SchMinute2 = Minute2.Text;
-            MessageBox.Show("Schedule 2 Saved");
+            MessageBox.Show("Schedule 2 Saved", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void ApplySch3_Click_1(object sender, EventArgs e)
@@ -642,7 +670,7 @@ namespace Fivem_Server_Manager
             lineChanger("Schedule3_M = " + Minute3.Text, "Config.cfg", 7);
             SchHour3 = Hour3.Text;
             SchMinute3 = Minute3.Text;
-            MessageBox.Show("Schedule 3 Saved");
+            MessageBox.Show("Schedule 3 Saved", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         internal static void insertLineToSimpleFile(string fileName, string lineToSearch, string lineToAdd, bool aboveBelow = false)
@@ -687,7 +715,7 @@ namespace Fivem_Server_Manager
             }
             else
             {
-                MessageBox.Show("please select a category");
+                MessageBox.Show("please select a category", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             }
             string newResource = "start " + NewResource.Text;
@@ -734,15 +762,13 @@ namespace Fivem_Server_Manager
             if (h == -1)
             {
                 checkedListBox1.ClearSelected();
-                MessageBox.Show("Resources Not Found");
+                MessageBox.Show("Resources Not Found", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             else
             {
                 checkedListBox1.SetSelected(h, true);
             }
-           // var selectitem = checkedListBox1.SelectedItem;
-           // ResourceSelected = selectitem.ToString();
-           // Console.WriteLine(ResourceSelected);
+           
         }
 
         private void CheckedListBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -772,5 +798,7 @@ namespace Fivem_Server_Manager
                 }
             }
         }
+
+        
     }
 }
