@@ -16,3 +16,5 @@ C:\Users\okisu\Documents\GitHub\FivemServerManager\Fivem Server Manager\obj\Debu
 C:\Users\okisu\Documents\GitHub\FivemServerManager\Fivem Server Manager\obj\Debug\Fivem Server Manager.csproj.CoreCompileInputs.cache
 C:\Users\okisu\Documents\GitHub\FivemServerManager\Fivem Server Manager\obj\Debug\Fivem Server Manager.exe
 C:\Users\okisu\Documents\GitHub\FivemServerManager\Fivem Server Manager\obj\Debug\Fivem Server Manager.pdb
+C:\Users\okisu\Documents\Myproject\Fivem Server Manager\Debug\Fivem Server Manager.exe
+C:\Users\okisu\Documents\Myproject\Fivem Server Manager\Debug\Fivem Server Manager.pdb
