@@ -5,13 +5,15 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-
+using System.Net;
 
 
 namespace Fivem_Server_Manager
 {
     public partial class Form1 : Form
     {
+        string appversion = "1.3";
+
         string FileConfigServer = "server.cfg";
         string FileConfigApp = "Config.cfg";
         string LocationFivemServer = "";
@@ -25,6 +27,15 @@ namespace Fivem_Server_Manager
         string DatabaseName = "";
         string DatabaseUser = "";
         string DatabasePass = "";
+
+        public string Id = "";
+        public string SteamId = "";
+        public string NamePlayer = "";
+        public string Ip = "";
+        public string PingPlayer = "";
+        int playerDetected = 0;
+        int intervalCheckPlayer = 5;
+        
 
         string Hour;
         string Minute;
@@ -42,7 +53,7 @@ namespace Fivem_Server_Manager
         int Change_ApplyMode = 0;
         int Start_StopMode = 0;
         bool ServerStarted = false;
-       // bool ServerStoped = false;
+        // bool ServerStoped = false;
         bool isrunning = false;
         int selecteditem = -1;
 
@@ -67,6 +78,26 @@ namespace Fivem_Server_Manager
 
             Thread SC = new Thread(Schedule);
             SC.Start();
+           
+            using (WebClient client = new WebClient())
+            {                              
+                string s = client.DownloadString("https://raw.githubusercontent.com/Oky12/FivemServerManager/master/Version");
+                Console.WriteLine(s);
+                
+                int a = s.IndexOf(appversion);
+                if (a == -1)
+                {
+                    DialogResult result = MessageBox.Show("New Version is Available. Do you want to Download now?", "Check for Update",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    if (result == DialogResult.Yes)
+                    {
+                        Process.Start("https://github.com/Oky12/FivemServerManager/releases");
+
+                        StopProc("Fivem Server Manager");
+                    }           
+                }
+                
+            }            
         }
 
         private void Form1_FormClosing(Object sender, FormClosingEventArgs e)
@@ -106,7 +137,13 @@ namespace Fivem_Server_Manager
             if (isrunning && ServerStarted)
             {
                 StatusText("STARTED");
-
+                //button1.Enabled = false;
+                BrowserFolder.Enabled = false;
+                contextMenuStrip1.Items[0].Enabled = false;
+                contextMenuStrip1.Items[1].Enabled = true;
+                contextMenuStrip1.Items[2].Enabled = true;
+                contextMenuStrip1.Items[3].Enabled = true;
+                contextMenuStrip2.Items[0].Enabled = true;
             }
             if (isrunning && !ServerStarted)
             {
@@ -115,10 +152,16 @@ namespace Fivem_Server_Manager
             if (!isrunning)
             {
                 StatusText("STOP");
-
+                //button1.Enabled = true;
+                BrowserFolder.Enabled = true;
+                contextMenuStrip1.Items[0].Enabled = true;
+                contextMenuStrip1.Items[1].Enabled = false;
+                contextMenuStrip1.Items[2].Enabled = false;
+                contextMenuStrip1.Items[3].Enabled = false;
+                contextMenuStrip2.Items[0].Enabled = false;
             }
 
-            if(!isrunning && ServerStarted)
+            if (!isrunning && ServerStarted)
             {
                 MessageBox.Show("Server Not responding or Crash. Restarting....", "Warning",
             MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -130,7 +173,7 @@ namespace Fivem_Server_Manager
                 Thread.Sleep(1000);
                 Thread StartServer = new Thread(start);
                 StartServer.Start();
-               
+
                 //CheckProcess();
             }
         }
@@ -219,7 +262,7 @@ namespace Fivem_Server_Manager
                 int endslot = (EndLineResource - StartLineResource) - 1;
                 while (slot < endslot)
                 {
-
+                    slot++;
                     string StartLineData = GetLine(file, StartLineResource + slot);
                     int L = StartLineData.Length;
                     if (L != 0)
@@ -242,7 +285,7 @@ namespace Fivem_Server_Manager
                         }
 
                     }
-                    slot++;
+                    
                 }
             }
         }
@@ -260,10 +303,12 @@ namespace Fivem_Server_Manager
             if (!File.Exists(LocationFivemServer + "\\run.cmd"))
             {
                 MessageBox.Show("Fivem Server Not Found. make sure you have set the folder fivem server location", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                tabControl1.SelectTab(tabPage5);
             }
             else
             {
-                if (File.Exists(FileConfigServer) && File.Exists(FileConfigApp))
+                Console.WriteLine(LocationFivemServer + "\\server-data\\" + FileConfigServer);
+                if (File.Exists(LocationFivemServer + "\\server-data\\" + FileConfigServer) && File.Exists(FileConfigApp))
                 {
                     int indexDB = GetIndex(FileConfigServer, "set mysql_connection_string");
                     if (indexDB != 0)
@@ -402,32 +447,72 @@ namespace Fivem_Server_Manager
                 }
             }
         }
-
+        Process proc = new Process();
 
         void start()
         {
 
             File.Delete("LOG.txt");
-            var proc = new Process();
-            proc.StartInfo.FileName = LocationFivemServer + "\\run.cmd";
+            
+        proc.StartInfo.FileName = LocationFivemServer + "\\run.cmd";
             proc.StartInfo.Arguments = " +exec " + FileConfigServer;
             proc.StartInfo.UseShellExecute = false;
             // set up output redirection           
             proc.StartInfo.RedirectStandardOutput = true;
+            proc.StartInfo.RedirectStandardInput = true;
             proc.StartInfo.RedirectStandardError = true;
             proc.EnableRaisingEvents = true;
             proc.StartInfo.CreateNoWindow = true;
             // see below for output handler
 
-            proc.ErrorDataReceived += proc_DataReceived;
-            proc.OutputDataReceived += proc_DataReceived;
+            //proc.ErrorDataReceived += proc_DataReceived;
+            //proc.OutputDataReceived += proc_DataReceived;
 
             proc.Start();
 
+            StreamReader read = proc.StandardOutput;
+            StreamWriter write = proc.StandardInput;
+            
+            String line = read.ReadLine();
+            while (line != null)
+            {
 
-            proc.BeginErrorReadLine();
-            proc.BeginOutputReadLine();
+                int PL = line.IndexOf(" steam:");
+                if (PL != -1)
+                {
+                    PrintPlayerList(line);
+                    Thread.Sleep(10);
+                    dataGridView1.Rows.Add();
+                    dataGridView1.Rows[playerDetected].Cells[0].Value = Id;
+                    dataGridView1.Rows[playerDetected].Cells[1].Value = NamePlayer;
+                    dataGridView1.Rows[playerDetected].Cells[3].Value = Ip;
+                    dataGridView1.Rows[playerDetected].Cells[2].Value = PingPlayer;
+                    playerDetected++;
 
+                }
+                else
+                {
+                    playerDetected = 0;
+                    WriteToFileThreadSafe("[" + Hour + ":" + Minute + ":" + Second + "]: " + line, "LOG.txt");
+                    SetText(line);
+                    int a = line.IndexOf("Welcome!");
+                    //Console.WriteLine(a);
+                    if (a != -1 && isrunning)
+                    {
+
+                        ServerStarted = true;
+                        CheckProcess();
+                    }
+                }
+
+                line = read.ReadLine();
+
+            }
+
+            //proc.BeginErrorReadLine();
+
+            //proc.BeginOutputReadLine();
+            
             proc.WaitForExit();
         }
 
@@ -453,34 +538,34 @@ namespace Fivem_Server_Manager
             }
         }
 
-        void proc_DataReceived(object sender, DataReceivedEventArgs e)
-        {
-            // output will be in string e.Data
-            SetText(e.Data);
-            WriteToFileThreadSafe("[" + Hour + ":" + Minute + ":" + Second + "]: " + e.Data, "LOG.txt");
-            //using (StreamWriter sw = File.AppendText())
-            //{
-            //    //Console.WriteLine("Writing LOG");
-            //    sw.WriteLine();
+        //void proc_DataReceived(object sender, DataReceivedEventArgs e)
+        //{
+        //    // output will be in string e.Data
+        //    SetText(e.Data);
+        //    WriteToFileThreadSafe("[" + Hour + ":" + Minute + ":" + Second + "]: " + e.Data, "LOG.txt");
+        //    //using (StreamWriter sw = File.AppendText())
+        //    //{
+        //    //    //Console.WriteLine("Writing LOG");
+        //    //    sw.WriteLine();
 
-            //}
+        //    //}
 
-            if (e.Data != null)
-            {
-                int a = e.Data.IndexOf("Welcome!");
-                //Console.WriteLine(a);
-                if (a != -1 && isrunning)
-                {
+        //    if (e.Data != null)
+        //    {
+        //        int a = e.Data.IndexOf("Welcome!");
+        //        //Console.WriteLine(a);
+        //        if (a != -1 && isrunning)
+        //        {
 
-                    ServerStarted = true;
-                    CheckProcess();
-                }
-                //else
-                //{
-                //    ServerStarted = false;
-                //}
-            }
-        }
+        //            ServerStarted = true;
+        //            CheckProcess();
+        //        }
+        //        //else
+        //        //{
+        //        //    ServerStarted = false;
+        //        //}
+        //    }
+        //}
 
         delegate void SetTextCallback(string text);
 
@@ -571,7 +656,7 @@ namespace Fivem_Server_Manager
             if (Change_ApplyMode == 1)
             {
                 change.Text = "Apply";
-                BrowserFolder.Enabled = true;
+               // BrowserFolder.Enabled = true;
 
                 if (LocationFivemServer != "")
                 {
@@ -592,7 +677,7 @@ namespace Fivem_Server_Manager
             if (Change_ApplyMode == 0)
             {
                 change.Text = "Change";
-                BrowserFolder.Enabled = false;
+               // BrowserFolder.Enabled = false;
 
                 BoxClient.Visible = false;
                 BoxServerName.Visible = false;
@@ -721,6 +806,7 @@ namespace Fivem_Server_Manager
         }
         void Time()
         {
+            int CheckStatusTime = 0;
             for (int i = 0; i < 10; i++)
             {
                 DateTime LocalTime = DateTime.Now;
@@ -730,6 +816,24 @@ namespace Fivem_Server_Manager
                 printTime(Hour + ":" + Minute + ":" + Second);
                 Thread.Sleep(1000);
                 CheckProcess();
+                
+                CheckStatusTime++;
+                if (CheckStatusTime >= intervalCheckPlayer && isrunning && ServerStarted)
+                {
+                   int R = dataGridView1.Rows.Count;
+                    if(R != 0)
+                    {                       
+                        dataGridView1.Rows.Clear();
+                    }
+                    
+                    StreamWriter Send = proc.StandardInput;
+                    Send.WriteLine("status");
+                    CheckStatusTime = 0;
+                }
+                else
+                {
+                    playerDetected = 0;
+                }
                 if (i == 9) { i = 0; }
             }
 
@@ -742,12 +846,10 @@ namespace Fivem_Server_Manager
 
         }
 
-
+        Thread StartServer;
         private void Button1_Click_1(object sender, EventArgs e)
 
         {
-
-
             Start_StopMode++;
 
             if (Start_StopMode == 2)
@@ -759,30 +861,29 @@ namespace Fivem_Server_Manager
             {
 
                 Start.Text = "STOP";
-                if (File.Exists("start_server.bat"))
+                StartServer = new Thread(start);
+                tabControl1.SelectTab(tabPage2);
+
+                StartServer.Start();
+                textBox1.Text = "";
+
+                Thread.Sleep(2500);
+                //CheckProcess();
+                RSTART.Enabled = true;
+                if (!isrunning)
                 {
-
-                    Thread StartServer = new Thread(start);
-                    StartServer.Start();
-                    textBox1.Text = "";
-
-                    Thread.Sleep(1500);
-                    //CheckProcess();
-                    RSTART.Enabled = true;
-                    if (!isrunning)
-                    {
-                        MessageBox.Show("Server Failed to Start", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    MessageBox.Show("Server Failed to Start", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    AutoRestart();
                 }
-                else { MessageBox.Show("start_server.bat not found. make sure file in same directory", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
-
             }
 
             if (Start_StopMode == 0)
             {
-
+                //proc.CancelOutputRead();
                 Start.Text = "START";
                 StopProc("FXServer");
+                //proc.Kill();
+                //StartServer.Abort();
                 ServerStarted = false;
                 //ServerStoped = true;
                 Thread.Sleep(500);
@@ -834,7 +935,7 @@ namespace Fivem_Server_Manager
             else { Schedule3 = false; }
         }
 
-        private void EditSch1_Click(object sender, EventArgs e)
+        private void EditSch1_Click_1(object sender, EventArgs e)
         {
 
             Hour1.Enabled = true;
@@ -875,7 +976,7 @@ namespace Fivem_Server_Manager
             MessageBox.Show("Schedule 1 Saved", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void ApplySch2_Click_1(object sender, EventArgs e)
+        private void ApplySch2_Click(object sender, EventArgs e)
         {
             Hour2.Enabled = false;
             Minute2.Enabled = false;
@@ -888,7 +989,7 @@ namespace Fivem_Server_Manager
             MessageBox.Show("Schedule 2 Saved", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void ApplySch3_Click_1(object sender, EventArgs e)
+        private void ApplySch3_Click(object sender, EventArgs e)
         {
             Hour3.Enabled = false;
             Minute3.Enabled = false;
@@ -979,6 +1080,8 @@ namespace Fivem_Server_Manager
         private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             checkedListBox1.ClearSelected();
+            
+            
         }
 
 
@@ -1047,7 +1150,10 @@ namespace Fivem_Server_Manager
 
         private void LinkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            MessageBox.Show("Version: 1.2 \r\n"
+            
+           
+            
+            MessageBox.Show("Version: " + appversion + "\r\n"
                + "This Program Created By DroidNetPC \r\n"
                + "Github: Oky12 \r\n", "Credit", MessageBoxButtons.OK, MessageBoxIcon.Information
 
@@ -1100,7 +1206,50 @@ namespace Fivem_Server_Manager
 
         }
 
-        private void Button2_Click(object sender, EventArgs e)
+        
+       
+              
+        private void Button2_Click_1(object sender, EventArgs e)
+        {
+            //Thread ts = new Thread(TestCMDIO);
+            //ts.Start();
+            StreamWriter Send = proc.StandardInput;
+            Send.WriteLine(textBox3.Text);
+        }
+
+        void PrintPlayerList(string text)
+        {
+            int space1 = text.IndexOf(" ", 0);
+            int space2 = text.IndexOf(" ", space1 + 2);
+            int space3 = text.IndexOf(" ", space2 + 2);
+            int space4 = text.IndexOf(" ", space3 + 2);
+
+            int LD2 = (space2 - space1) - 1;
+            int LD3 = (space3 - space2) - 1;
+            int LD4 = (space4 - space3) - 1;
+            int LD5 = (text.Length - space4) - 1;
+
+            string ID = text.Substring(0, space1);
+            Console.WriteLine(ID);
+            Id = ID;
+            string Steam = text.Substring(space1 + 1, LD2);
+            Console.WriteLine(Steam);
+            SteamId = Steam;
+            string Name = text.Substring(space2 + 1, LD3);
+            Console.WriteLine(Name);
+            NamePlayer = Name;
+            string IP = text.Substring(space3 + 1, LD4);
+            Console.WriteLine(IP);
+            Ip = IP;
+            string Ping = text.Substring(space4 + 1, LD5);
+            Console.WriteLine(Ping);
+            PingPlayer = Ping;
+            
+        }
+
+       
+
+        private void BrowserFolder_Click(object sender, EventArgs e)
         {
             folderBrowserDialog1.Description = "Find and Select Fivem Server Folder";
             folderBrowserDialog1.ShowDialog();
@@ -1119,9 +1268,116 @@ namespace Fivem_Server_Manager
             {
                 MessageBox.Show("Fivem Server Not Found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
+        private void StartToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+            Console.WriteLine(checkedListBox1.SelectedItem);
+            var item = checkedListBox1.SelectedItem;
+            string Rsource = item.ToString();
+            if (isrunning && selecteditem != -1)
+            {
+                StreamWriter Send = proc.StandardInput;
+                Send.WriteLine("start " + Rsource);
+            }
+        }
 
+        private void StopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var item = checkedListBox1.SelectedItem;
+            string Rsource = item.ToString();
+            if (isrunning && selecteditem != -1)
+            {
+                StreamWriter Send = proc.StandardInput;
+                Send.WriteLine("stop " + Rsource);
+            }
+        }
+
+        private void RestartToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var item = checkedListBox1.SelectedItem;
+            string Rsource = item.ToString();
+            if (isrunning && selecteditem != -1)
+            {
+                StreamWriter Send = proc.StandardInput;
+                Send.WriteLine("restart " + Rsource);
+            }
+        }
+
+        
+
+        private void KickToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string input = Microsoft.VisualBasic.Interaction.InputBox("what is the reason you kicked him from the server?", "Reason Kick", "", 0, 0);
+            int  indexRow = dataGridView1.CurrentCell.RowIndex;
+            string DataCell = dataGridView1.Rows[indexRow].Cells[0].FormattedValue.ToString();
+            //Console.WriteLine(DataCell);
+            //Console.WriteLine(input);
+            if (isrunning && input != "")
+            {
+                Console.WriteLine("Send kick");
+                StreamWriter Send = proc.StandardInput;
+                Send.WriteLine("clientkick " + DataCell + " " + input);
+                Send.WriteLine("status");
+            }
+            
+        }
+
+        private void LinkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (isrunning && ServerStarted)
+            {
+                
+                using (WebClient client = new WebClient())
+                {
+
+                    string DataNewVer = client.DownloadString("https://runtime.fivem.net/artifacts/fivem/build_server_windows/master/");
+                    int b = DataNewVer.IndexOf("</tr><tr>");
+                    b = b + 22;
+                    string NewV = DataNewVer.Substring(b, 4);
+
+                    int Lip = Tcp.Length;
+                    int Iip = Tcp.IndexOf(":");
+                    string ip = Tcp.Substring(0, Iip);
+                    string port = Tcp.Substring(Iip + 1, Lip - (Iip + 1));
+                    
+                    string DataLocalVer = "";
+                    if (ip == "0.0.0.0")
+                    {
+                        DataLocalVer = client.DownloadString("http://127.0.0.1:" + port + "/info.json");
+                    }
+                    else
+                    {
+                        DataLocalVer = client.DownloadString("http://" + ip + ":" + port + "/info.json");
+                    }
+                    int c = DataLocalVer.IndexOf("SERVER v1");
+                    c = c + 14;
+                    string LocalVer = DataLocalVer.Substring(c, 4);
+
+                    SetText("new version" + NewV);
+                    SetText("Installed version" + LocalVer);
+                    if (NewV != LocalVer)
+                    {
+                        DialogResult result = MessageBox.Show("New Version of Fivem Server Windows is Available. Do you want to download now?", "New Version",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                        if (result == DialogResult.Yes)
+                        {
+                            Process.Start("https://runtime.fivem.net/artifacts/fivem/build_server_windows/master/");
+                        }
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Your Fivem Server is the latest version", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please Start Server to check Server Version", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            }
+        }
     }
 }
