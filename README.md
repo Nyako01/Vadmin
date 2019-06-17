@@ -5,18 +5,26 @@ This is a tool to easily manage server fivem
 - Start/Stop Server
 - AutoRestart Server and Clear Cache by schedule
 - Change SystemInfo
-- LOG Console
-- Resource Manager (Enable/Disable, Add/Remove Resource)
+- Console Command
+- Resource Manager (Enable/Disable, Add/Remove, Start/Stop/Restart Resource in server.cfg)
+- Restart Button (Manual Restart)
+- AUTO Restart if Server Crash or Force Close
+- Disable Close Program if Server Currently Running
+- Start Server Without start_server.bat
+- PlayerList
+- Check For Update (Progam and Server)
+
 
 ## ScreenShot
-![Screenshot_42](https://user-images.githubusercontent.com/30838114/58843041-0d239780-869b-11e9-8aef-00940ad4bcb8.png)
+![Screenshot_22](https://user-images.githubusercontent.com/30838114/59372624-20f18c80-8d72-11e9-8884-4cbeeaea69e8.png)
+
 
 ## Download
 to download this tool. you can go to [Release](https://github.com/Oky12/FivemServerManager/releases) and download latest version
 
 **Requirement**
 - net. framework 4.0 or above
-- start_server.bat (include "run.cmd +exec server.cfg" command)
+
 
 **Installation**
 1. extract to Server-Data (Config.cfg and the program)
@@ -82,3 +90,4 @@ start camry2016
 #endAddons
 ```
 3. open/run Fivem Server Manager
+4. Set Location Fivem Server
