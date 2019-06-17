@@ -3,7 +3,7 @@ This is a tool to easily manage server fivem
 
 ## Feature
 - Start/Stop Server
-- AutoRestart Server and Clear Cache by schedule
+- AutoRestart Server by schedule
 - Change SystemInfo
 - Console Command
 - Resource Manager (Enable/Disable, Add/Remove, Start/Stop/Restart Resource in server.cfg)
@@ -13,6 +13,10 @@ This is a tool to easily manage server fivem
 - Start Server Without start_server.bat
 - PlayerList
 - Check For Update (Progam and Server)
+- OneSync Support
+- Kick All Player Button
+- Option to Clear Cache When Restart in Setting menu
+- Clear Cache Button (manual Clear Cache)
 
 
 ## ScreenShot
@@ -23,7 +27,7 @@ This is a tool to easily manage server fivem
 to download this tool. you can go to [Release](https://github.com/Oky12/FivemServerManager/releases) and download latest version
 
 **Requirement**
-- net. framework 4.0 or above
+- Net. Framework 4.0 or above
 
 
 **Installation**
