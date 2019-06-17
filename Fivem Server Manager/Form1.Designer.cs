@@ -59,6 +59,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.CN = new System.Windows.Forms.Button();
             this.BoxDbPass = new System.Windows.Forms.TextBox();
             this.BoxDbUser = new System.Windows.Forms.TextBox();
             this.BoxDbName = new System.Windows.Forms.TextBox();
@@ -70,11 +71,8 @@
             this.BoxTcp = new System.Windows.Forms.TextBox();
             this.BoxServerName = new System.Windows.Forms.TextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NP = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PING = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.IP = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Kall = new System.Windows.Forms.Button();
+            this.PlayerList = new System.Windows.Forms.ListView();
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.kickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -94,6 +92,9 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.button1 = new System.Windows.Forms.Button();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.OSyc = new System.Windows.Forms.CheckBox();
+            this.ClearCache = new System.Windows.Forms.Button();
+            this.optClearCache = new System.Windows.Forms.CheckBox();
             this.label25 = new System.Windows.Forms.Label();
             this.BrowserFolder = new System.Windows.Forms.Button();
             this.BoxPathServer = new System.Windows.Forms.TextBox();
@@ -131,7 +132,6 @@
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage4.SuspendLayout();
@@ -174,6 +174,9 @@
             // 
             // textBox1
             // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.Location = new System.Drawing.Point(6, 6);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
@@ -239,6 +242,7 @@
             // 
             // change
             // 
+            this.change.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.change.Location = new System.Drawing.Point(250, 18);
             this.change.Name = "change";
             this.change.Size = new System.Drawing.Size(75, 23);
@@ -395,6 +399,9 @@
             // 
             // tabControl1
             // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage2);
@@ -408,6 +415,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.CN);
             this.tabPage1.Controls.Add(this.BoxDbPass);
             this.tabPage1.Controls.Add(this.BoxDbUser);
             this.tabPage1.Controls.Add(this.BoxDbName);
@@ -450,8 +458,21 @@
             this.tabPage1.UseVisualStyleBackColor = true;
             this.tabPage1.Click += new System.EventHandler(this.TabPage1_Click);
             // 
+            // CN
+            // 
+            this.CN.Location = new System.Drawing.Point(169, 18);
+            this.CN.Name = "CN";
+            this.CN.Size = new System.Drawing.Size(75, 23);
+            this.CN.TabIndex = 33;
+            this.CN.Text = "Cancel";
+            this.CN.UseVisualStyleBackColor = true;
+            this.CN.Visible = false;
+            this.CN.Click += new System.EventHandler(this.CN_Click);
+            // 
             // BoxDbPass
             // 
+            this.BoxDbPass.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.BoxDbPass.Location = new System.Drawing.Point(113, 306);
             this.BoxDbPass.Name = "BoxDbPass";
             this.BoxDbPass.Size = new System.Drawing.Size(212, 20);
@@ -460,6 +481,8 @@
             // 
             // BoxDbUser
             // 
+            this.BoxDbUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.BoxDbUser.Location = new System.Drawing.Point(113, 282);
             this.BoxDbUser.Name = "BoxDbUser";
             this.BoxDbUser.Size = new System.Drawing.Size(212, 20);
@@ -468,6 +491,8 @@
             // 
             // BoxDbName
             // 
+            this.BoxDbName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.BoxDbName.Location = new System.Drawing.Point(113, 258);
             this.BoxDbName.Name = "BoxDbName";
             this.BoxDbName.Size = new System.Drawing.Size(212, 20);
@@ -476,6 +501,8 @@
             // 
             // BoxDbServer
             // 
+            this.BoxDbServer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.BoxDbServer.Location = new System.Drawing.Point(113, 234);
             this.BoxDbServer.Name = "BoxDbServer";
             this.BoxDbServer.Size = new System.Drawing.Size(212, 20);
@@ -484,6 +511,8 @@
             // 
             // BoxIcon
             // 
+            this.BoxIcon.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.BoxIcon.Location = new System.Drawing.Point(113, 172);
             this.BoxIcon.Name = "BoxIcon";
             this.BoxIcon.Size = new System.Drawing.Size(212, 20);
@@ -492,6 +521,8 @@
             // 
             // BoxClient
             // 
+            this.BoxClient.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.BoxClient.Location = new System.Drawing.Point(113, 149);
             this.BoxClient.Name = "BoxClient";
             this.BoxClient.Size = new System.Drawing.Size(212, 20);
@@ -500,6 +531,8 @@
             // 
             // BoxLc
             // 
+            this.BoxLc.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.BoxLc.Location = new System.Drawing.Point(113, 125);
             this.BoxLc.Name = "BoxLc";
             this.BoxLc.Size = new System.Drawing.Size(212, 20);
@@ -508,6 +541,8 @@
             // 
             // BoxUdp
             // 
+            this.BoxUdp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.BoxUdp.Location = new System.Drawing.Point(113, 101);
             this.BoxUdp.Name = "BoxUdp";
             this.BoxUdp.Size = new System.Drawing.Size(212, 20);
@@ -516,6 +551,8 @@
             // 
             // BoxTcp
             // 
+            this.BoxTcp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.BoxTcp.Location = new System.Drawing.Point(113, 77);
             this.BoxTcp.Name = "BoxTcp";
             this.BoxTcp.Size = new System.Drawing.Size(212, 20);
@@ -524,6 +561,8 @@
             // 
             // BoxServerName
             // 
+            this.BoxServerName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.BoxServerName.Location = new System.Drawing.Point(114, 52);
             this.BoxServerName.Name = "BoxServerName";
             this.BoxServerName.Size = new System.Drawing.Size(212, 20);
@@ -532,7 +571,8 @@
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.dataGridView1);
+            this.tabPage3.Controls.Add(this.Kall);
+            this.tabPage3.Controls.Add(this.PlayerList);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
@@ -541,56 +581,34 @@
             this.tabPage3.Text = "PlayerList";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // dataGridView1
+            // Kall
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.ButtonFace;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ID,
-            this.NP,
-            this.PING,
-            this.IP});
-            this.dataGridView1.ContextMenuStrip = this.contextMenuStrip2;
-            this.dataGridView1.Location = new System.Drawing.Point(6, 7);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(330, 347);
-            this.dataGridView1.TabIndex = 0;
+            this.Kall.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Kall.Location = new System.Drawing.Point(3, 326);
+            this.Kall.Name = "Kall";
+            this.Kall.Size = new System.Drawing.Size(336, 28);
+            this.Kall.TabIndex = 1;
+            this.Kall.Text = "Kick All Player";
+            this.Kall.UseVisualStyleBackColor = true;
+            this.Kall.Click += new System.EventHandler(this.Kall_Click);
             // 
-            // ID
+            // PlayerList
             // 
-            this.ID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.ID.HeaderText = "ID";
-            this.ID.Name = "ID";
-            this.ID.ReadOnly = true;
-            this.ID.Width = 43;
-            // 
-            // NP
-            // 
-            this.NP.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-            this.NP.HeaderText = "Name";
-            this.NP.Name = "NP";
-            this.NP.ReadOnly = true;
-            this.NP.Width = 60;
-            // 
-            // PING
-            // 
-            this.PING.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.PING.HeaderText = "PING";
-            this.PING.Name = "PING";
-            this.PING.ReadOnly = true;
-            this.PING.Width = 58;
-            // 
-            // IP
-            // 
-            this.IP.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.IP.HeaderText = "IP";
-            this.IP.Name = "IP";
-            this.IP.ReadOnly = true;
-            this.IP.Width = 42;
+            this.PlayerList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.PlayerList.ContextMenuStrip = this.contextMenuStrip2;
+            this.PlayerList.FullRowSelect = true;
+            this.PlayerList.GridLines = true;
+            this.PlayerList.HideSelection = false;
+            this.PlayerList.Location = new System.Drawing.Point(3, 3);
+            this.PlayerList.Name = "PlayerList";
+            this.PlayerList.Size = new System.Drawing.Size(336, 317);
+            this.PlayerList.TabIndex = 0;
+            this.PlayerList.UseCompatibleStateImageBehavior = false;
+            this.PlayerList.View = System.Windows.Forms.View.Details;
+            this.PlayerList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PlayerList_MouseClick);
             // 
             // contextMenuStrip2
             // 
@@ -622,6 +640,8 @@
             // 
             // textBox3
             // 
+            this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox3.Location = new System.Drawing.Point(6, 332);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(249, 20);
@@ -629,6 +649,7 @@
             // 
             // button2
             // 
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.Location = new System.Drawing.Point(261, 330);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
@@ -665,6 +686,7 @@
             // 
             // comboBox1
             // 
+            this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
             "ESX",
@@ -678,6 +700,7 @@
             // 
             // NewResource
             // 
+            this.NewResource.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.NewResource.ForeColor = System.Drawing.Color.Gray;
             this.NewResource.Location = new System.Drawing.Point(169, 10);
             this.NewResource.Name = "NewResource";
@@ -689,6 +712,9 @@
             // 
             // checkedListBox1
             // 
+            this.checkedListBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.checkedListBox1.ContextMenuStrip = this.contextMenuStrip1;
             this.checkedListBox1.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkedListBox1.FormattingEnabled = true;
@@ -766,6 +792,7 @@
             // 
             // button1
             // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.Location = new System.Drawing.Point(169, 36);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(55, 23);
@@ -776,6 +803,9 @@
             // 
             // tabPage5
             // 
+            this.tabPage5.Controls.Add(this.OSyc);
+            this.tabPage5.Controls.Add(this.ClearCache);
+            this.tabPage5.Controls.Add(this.optClearCache);
             this.tabPage5.Controls.Add(this.label25);
             this.tabPage5.Controls.Add(this.BrowserFolder);
             this.tabPage5.Controls.Add(this.BoxPathServer);
@@ -787,8 +817,42 @@
             this.tabPage5.Text = "Setting";
             this.tabPage5.UseVisualStyleBackColor = true;
             // 
+            // OSyc
+            // 
+            this.OSyc.AutoSize = true;
+            this.OSyc.Location = new System.Drawing.Point(210, 60);
+            this.OSyc.Name = "OSyc";
+            this.OSyc.Size = new System.Drawing.Size(70, 17);
+            this.OSyc.TabIndex = 42;
+            this.OSyc.Text = "OneSync";
+            this.OSyc.UseVisualStyleBackColor = true;
+            this.OSyc.CheckedChanged += new System.EventHandler(this.OSyc_CheckedChanged);
+            // 
+            // ClearCache
+            // 
+            this.ClearCache.Location = new System.Drawing.Point(22, 83);
+            this.ClearCache.Name = "ClearCache";
+            this.ClearCache.Size = new System.Drawing.Size(150, 23);
+            this.ClearCache.TabIndex = 41;
+            this.ClearCache.Text = "Clear Cache";
+            this.ClearCache.UseVisualStyleBackColor = true;
+            this.ClearCache.Click += new System.EventHandler(this.ClearCache_Click);
+            // 
+            // optClearCache
+            // 
+            this.optClearCache.AutoSize = true;
+            this.optClearCache.Location = new System.Drawing.Point(24, 60);
+            this.optClearCache.Name = "optClearCache";
+            this.optClearCache.Size = new System.Drawing.Size(153, 17);
+            this.optClearCache.TabIndex = 39;
+            this.optClearCache.Text = "Clear Cache When Restart";
+            this.optClearCache.UseVisualStyleBackColor = true;
+            this.optClearCache.CheckedChanged += new System.EventHandler(this.OptClearCache_CheckedChanged);
+            // 
             // label25
             // 
+            this.label25.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.label25.AutoSize = true;
             this.label25.Location = new System.Drawing.Point(12, 9);
             this.label25.Name = "label25";
@@ -798,6 +862,7 @@
             // 
             // BrowserFolder
             // 
+            this.BrowserFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.BrowserFolder.Location = new System.Drawing.Point(241, 23);
             this.BrowserFolder.Name = "BrowserFolder";
             this.BrowserFolder.Size = new System.Drawing.Size(75, 23);
@@ -808,6 +873,8 @@
             // 
             // BoxPathServer
             // 
+            this.BoxPathServer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.BoxPathServer.Enabled = false;
             this.BoxPathServer.Location = new System.Drawing.Point(24, 25);
             this.BoxPathServer.Name = "BoxPathServer";
@@ -817,6 +884,9 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.ApplySch3);
             this.groupBox1.Controls.Add(this.LTIME);
             this.groupBox1.Controls.Add(this.EditSch3);
@@ -843,9 +913,9 @@
             this.groupBox1.Controls.Add(this.checkBox1);
             this.groupBox1.Controls.Add(this.Minute1);
             this.groupBox1.Controls.Add(this.Hour1);
-            this.groupBox1.Location = new System.Drawing.Point(4, 68);
+            this.groupBox1.Location = new System.Drawing.Point(4, 115);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(335, 275);
+            this.groupBox1.Size = new System.Drawing.Size(335, 228);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Auto Restart Schedule";
@@ -1108,6 +1178,7 @@
             // 
             // linkLabel2
             // 
+            this.linkLabel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.linkLabel2.AutoSize = true;
             this.linkLabel2.Location = new System.Drawing.Point(327, 6);
             this.linkLabel2.Name = "linkLabel2";
@@ -1119,6 +1190,7 @@
             // 
             // linkLabel3
             // 
+            this.linkLabel3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.linkLabel3.AutoSize = true;
             this.linkLabel3.Location = new System.Drawing.Point(252, 33);
             this.linkLabel3.Name = "linkLabel3";
@@ -1132,7 +1204,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(372, 447);
+            this.ClientSize = new System.Drawing.Size(368, 447);
             this.Controls.Add(this.linkLabel3);
             this.Controls.Add(this.linkLabel2);
             this.Controls.Add(this.RSTART);
@@ -1140,10 +1212,9 @@
             this.Controls.Add(this.Start);
             this.Controls.Add(this.Status_Server);
             this.Controls.Add(this.label2);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
             this.Name = "Form1";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Fivem Server Manager";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -1151,7 +1222,6 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.contextMenuStrip2.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
@@ -1255,17 +1325,18 @@
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.TextBox Minute1;
         private System.Windows.Forms.TextBox Hour1;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NP;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PING;
-        private System.Windows.Forms.DataGridViewTextBoxColumn IP;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Button BrowserFolder;
         private System.Windows.Forms.TextBox BoxPathServer;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
         private System.Windows.Forms.ToolStripMenuItem kickToolStripMenuItem;
         private System.Windows.Forms.LinkLabel linkLabel3;
+        private System.Windows.Forms.Button CN;
+        private System.Windows.Forms.Button ClearCache;
+        private System.Windows.Forms.CheckBox optClearCache;
+        private System.Windows.Forms.ListView PlayerList;
+        private System.Windows.Forms.CheckBox OSyc;
+        private System.Windows.Forms.Button Kall;
     }
 }
 

@@ -16,4 +16,3 @@ C:\Users\okisu\Documents\GitHub\FivemServerManager\Fivem Server Manager\obj\Rele
 C:\Users\okisu\Documents\GitHub\FivemServerManager\Fivem Server Manager\obj\Release\Fivem Server Manager.pdb
 C:\Users\okisu\Documents\Myproject\Fivem Server Manager\Release\Fivem Server Manager.exe
 C:\Users\okisu\Documents\Myproject\Fivem Server Manager\Release\Fivem Server Manager.pdb
-C:\Users\okisu\Documents\GitHub\FivemServerManager\Fivem Server Manager\obj\Release\Fivem Server Manager.csprojAssemblyReference.cache
