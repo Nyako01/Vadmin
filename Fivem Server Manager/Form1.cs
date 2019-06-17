@@ -1513,7 +1513,15 @@ namespace Fivem_Server_Manager
 
         private void ClearCache_Click(object sender, EventArgs e)
         {
-            Directory.Delete("cache", true);
+            if (isrunning)
+            {
+                MessageBox.Show("please Stop server to Clear Cache", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            }
+            else
+            {
+                Directory.Delete("cache", true);
+            }
         }
 
         private void OptClearCache_CheckedChanged(object sender, EventArgs e)
