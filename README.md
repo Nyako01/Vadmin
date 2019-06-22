@@ -20,7 +20,7 @@ This is a tool to easily manage server fivem
 
 
 ## ScreenShot
-![Screenshot_22](https://user-images.githubusercontent.com/30838114/59372624-20f18c80-8d72-11e9-8884-4cbeeaea69e8.png)
+
 
 
 ## Download
