@@ -1,4 +1,4 @@
-# FivemServerManager
+# Server Manager for Fivem
 This is a tool to easily manage server fivem
 
 ## Feature
