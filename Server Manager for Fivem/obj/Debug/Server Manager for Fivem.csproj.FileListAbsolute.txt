@@ -1,0 +1,13 @@
+C:\Users\okisu\Myproject\Fivem Server Manager\Debug\Server Manager for Fivem.exe
+C:\Users\okisu\Myproject\Fivem Server Manager\Debug\Server Manager for Fivem.pdb
+C:\Users\okisu\Documents\Server Manager for Fivem\Server Manager for Fivem\obj\Debug\Server Manager for Fivem.csprojAssemblyReference.cache
+C:\Users\okisu\Documents\Server Manager for Fivem\Server Manager for Fivem\obj\Debug\Fivem_Server_Manager.Form1.resources
+C:\Users\okisu\Documents\Server Manager for Fivem\Server Manager for Fivem\obj\Debug\Fivem_Server_Manager.InstallResource.resources
+C:\Users\okisu\Documents\Server Manager for Fivem\Server Manager for Fivem\obj\Debug\Server_Manager_for_Fivem.Properties.Resources.resources
+C:\Users\okisu\Documents\Server Manager for Fivem\Server Manager for Fivem\obj\Debug\Server Manager for Fivem.csproj.GenerateResource.cache
+C:\Users\okisu\Documents\Server Manager for Fivem\Server Manager for Fivem\obj\Debug\Server Manager for Fivem.csproj.CoreCompileInputs.cache
+C:\Users\okisu\Documents\Server Manager for Fivem\Server Manager for Fivem\obj\Debug\Server Manager for Fivem.exe
+C:\Users\okisu\Documents\Server Manager for Fivem\Server Manager for Fivem\obj\Debug\Server Manager for Fivem.pdb
+C:\Users\okisu\Documents\Myproject\Fivem Server Manager\Debug\Server Manager for Fivem.exe
+C:\Users\okisu\Documents\Myproject\Fivem Server Manager\Debug\Server Manager for Fivem.pdb
+C:\Users\okisu\Documents\Server Manager for Fivem\Server Manager for Fivem\obj\Debug\Fivem_Server_Manager.EditSchedule.resources
