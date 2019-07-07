@@ -3,16 +3,28 @@ This is a tool to easily manage server fivem
 
 ## Feature
 - Start/Stop Server
-- AutoRestart Server and Clear Cache by schedule
+- AutoRestart Server by schedule
 - Change SystemInfo
 - Console Command
-- Resource Manager (Enable/Disable, Add/Remove, Start/Stop/Restart Resource in server.cfg)
+- Resource Manager (Enable/Disable/Rename, Install/Uninstall, Start/Stop/Restart Resource)
 - Restart Button (Manual Restart)
 - AUTO Restart if Server Crash or Force Close
 - Disable Close Program if Server Currently Running
-- Start Server Without start_server.bat
-- PlayerList
+- Start Server Without start_server.bat (batch file)
+- PlayerList (include Kick Player)
 - Check For Update (Progam and Server)
+- OneSync Support
+- Kick All Player Button
+- Option to Clear Cache When Restart in Setting menu
+- Clear Cache Button (manual Clear Cache)
+- Custom Server Config
+- Server Mode (Public Server and Test Server)
+- Theme Option (Dark Theme available)
+- Execute Command Before Auto Restart
+- Kick All Player When Auto Restart
+- Tooltip(information if you pointing something)
+- Information About Version of Program and Server in Setting
+- Auto Check Version Program and Server every 5 Second
 
 
 ## ScreenShot
