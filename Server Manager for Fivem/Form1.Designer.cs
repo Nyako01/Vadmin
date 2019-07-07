@@ -59,6 +59,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.CpuText = new System.Windows.Forms.Label();
             this.CN = new System.Windows.Forms.Button();
             this.BoxDbPass = new System.Windows.Forms.TextBox();
             this.BoxDbUser = new System.Windows.Forms.TextBox();
@@ -82,29 +83,25 @@
             this.ResourceList = new System.Windows.Forms.ListView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.disableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.restartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SearchText = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.label28 = new System.Windows.Forms.Label();
-            this.button4 = new System.Windows.Forms.Button();
-            this.TestServerFile = new System.Windows.Forms.TextBox();
-            this.label24 = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
-            this.PublicServerFile = new System.Windows.Forms.TextBox();
-            this.label27 = new System.Windows.Forms.Label();
-            this.ServerMode = new System.Windows.Forms.ComboBox();
-            this.label26 = new System.Windows.Forms.Label();
-            this.ThemeSelect = new System.Windows.Forms.ComboBox();
-            this.OSyc = new System.Windows.Forms.CheckBox();
-            this.ClearCache = new System.Windows.Forms.Button();
-            this.optClearCache = new System.Windows.Forms.CheckBox();
-            this.label25 = new System.Windows.Forms.Label();
-            this.BrowserFolder = new System.Windows.Forms.Button();
-            this.BoxPathServer = new System.Windows.Forms.TextBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ShowNotifyUp = new System.Windows.Forms.CheckBox();
+            this.UpdateServ = new System.Windows.Forms.Button();
+            this.UpdateSoft = new System.Windows.Forms.Button();
+            this.label32 = new System.Windows.Forms.Label();
+            this.label31 = new System.Windows.Forms.Label();
+            this.InstalledServ = new System.Windows.Forms.Label();
+            this.NewSoft = new System.Windows.Forms.Label();
+            this.InstalledSoft = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
             this.Note3 = new System.Windows.Forms.Label();
             this.Minute3 = new System.Windows.Forms.Label();
             this.Hour3 = new System.Windows.Forms.Label();
@@ -126,10 +123,25 @@
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.label28 = new System.Windows.Forms.Label();
+            this.button4 = new System.Windows.Forms.Button();
+            this.TestServerFile = new System.Windows.Forms.TextBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
+            this.PublicServerFile = new System.Windows.Forms.TextBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.ServerMode = new System.Windows.Forms.ComboBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.ThemeSelect = new System.Windows.Forms.ComboBox();
+            this.OSyc = new System.Windows.Forms.CheckBox();
+            this.ClearCache = new System.Windows.Forms.Button();
+            this.optClearCache = new System.Windows.Forms.CheckBox();
+            this.label25 = new System.Windows.Forms.Label();
+            this.BrowserFolder = new System.Windows.Forms.Button();
+            this.BoxPathServer = new System.Windows.Forms.TextBox();
             this.RSTART = new System.Windows.Forms.Button();
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.linkLabel3 = new System.Windows.Forms.LinkLabel();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tabControl1.SuspendLayout();
@@ -140,7 +152,6 @@
             this.tabPage4.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.tabPage5.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Status_Server
@@ -300,6 +311,7 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.Transparent;
+            this.tabPage1.Controls.Add(this.CpuText);
             this.tabPage1.Controls.Add(this.CN);
             this.tabPage1.Controls.Add(this.BoxDbPass);
             this.tabPage1.Controls.Add(this.BoxDbUser);
@@ -338,6 +350,11 @@
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             this.tabPage1.Click += new System.EventHandler(this.TabPage1_Click);
+            // 
+            // CpuText
+            // 
+            resources.ApplyResources(this.CpuText, "CpuText");
+            this.CpuText.Name = "CpuText";
             // 
             // CN
             // 
@@ -485,17 +502,46 @@
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.removeToolStripMenuItem,
+            this.enableToolStripMenuItem,
             this.startToolStripMenuItem,
             this.stopToolStripMenuItem,
             this.restartToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
+            this.contextMenuStrip1.Opened += new System.EventHandler(this.ContextMenuStrip1_Opened);
             // 
             // removeToolStripMenuItem
             // 
             this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
             resources.ApplyResources(this.removeToolStripMenuItem, "removeToolStripMenuItem");
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.RemoveToolStripMenuItem_Click);
+            // 
+            // enableToolStripMenuItem
+            // 
+            this.enableToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enableToolStripMenuItem1,
+            this.disableToolStripMenuItem,
+            this.renameToolStripMenuItem});
+            this.enableToolStripMenuItem.Name = "enableToolStripMenuItem";
+            resources.ApplyResources(this.enableToolStripMenuItem, "enableToolStripMenuItem");
+            // 
+            // enableToolStripMenuItem1
+            // 
+            this.enableToolStripMenuItem1.Name = "enableToolStripMenuItem1";
+            resources.ApplyResources(this.enableToolStripMenuItem1, "enableToolStripMenuItem1");
+            this.enableToolStripMenuItem1.Click += new System.EventHandler(this.EnableToolStripMenuItem1_Click);
+            // 
+            // disableToolStripMenuItem
+            // 
+            this.disableToolStripMenuItem.Name = "disableToolStripMenuItem";
+            resources.ApplyResources(this.disableToolStripMenuItem, "disableToolStripMenuItem");
+            this.disableToolStripMenuItem.Click += new System.EventHandler(this.DisableToolStripMenuItem_Click);
+            // 
+            // renameToolStripMenuItem
+            // 
+            this.renameToolStripMenuItem.Name = "renameToolStripMenuItem";
+            resources.ApplyResources(this.renameToolStripMenuItem, "renameToolStripMenuItem");
+            this.renameToolStripMenuItem.Click += new System.EventHandler(this.RenameToolStripMenuItem_Click);
             // 
             // startToolStripMenuItem
             // 
@@ -534,7 +580,38 @@
             // 
             // tabPage5
             // 
+            resources.ApplyResources(this.tabPage5, "tabPage5");
             this.tabPage5.BackColor = System.Drawing.Color.Transparent;
+            this.tabPage5.Controls.Add(this.ShowNotifyUp);
+            this.tabPage5.Controls.Add(this.UpdateServ);
+            this.tabPage5.Controls.Add(this.UpdateSoft);
+            this.tabPage5.Controls.Add(this.label32);
+            this.tabPage5.Controls.Add(this.label31);
+            this.tabPage5.Controls.Add(this.InstalledServ);
+            this.tabPage5.Controls.Add(this.NewSoft);
+            this.tabPage5.Controls.Add(this.InstalledSoft);
+            this.tabPage5.Controls.Add(this.label17);
+            this.tabPage5.Controls.Add(this.Note3);
+            this.tabPage5.Controls.Add(this.Minute3);
+            this.tabPage5.Controls.Add(this.Hour3);
+            this.tabPage5.Controls.Add(this.Note2);
+            this.tabPage5.Controls.Add(this.Minute2);
+            this.tabPage5.Controls.Add(this.Hour2);
+            this.tabPage5.Controls.Add(this.Note1);
+            this.tabPage5.Controls.Add(this.Minute1);
+            this.tabPage5.Controls.Add(this.Hour1);
+            this.tabPage5.Controls.Add(this.label29);
+            this.tabPage5.Controls.Add(this.LTIME);
+            this.tabPage5.Controls.Add(this.label8);
+            this.tabPage5.Controls.Add(this.label23);
+            this.tabPage5.Controls.Add(this.checkBox3);
+            this.tabPage5.Controls.Add(this.label20);
+            this.tabPage5.Controls.Add(this.checkBox2);
+            this.tabPage5.Controls.Add(this.EditSch1);
+            this.tabPage5.Controls.Add(this.label12);
+            this.tabPage5.Controls.Add(this.label11);
+            this.tabPage5.Controls.Add(this.label10);
+            this.tabPage5.Controls.Add(this.checkBox1);
             this.tabPage5.Controls.Add(this.label28);
             this.tabPage5.Controls.Add(this.button4);
             this.tabPage5.Controls.Add(this.TestServerFile);
@@ -551,10 +628,170 @@
             this.tabPage5.Controls.Add(this.label25);
             this.tabPage5.Controls.Add(this.BrowserFolder);
             this.tabPage5.Controls.Add(this.BoxPathServer);
-            this.tabPage5.Controls.Add(this.groupBox1);
-            resources.ApplyResources(this.tabPage5, "tabPage5");
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // ShowNotifyUp
+            // 
+            resources.ApplyResources(this.ShowNotifyUp, "ShowNotifyUp");
+            this.ShowNotifyUp.Checked = true;
+            this.ShowNotifyUp.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ShowNotifyUp.Name = "ShowNotifyUp";
+            this.ShowNotifyUp.UseVisualStyleBackColor = true;
+            // 
+            // UpdateServ
+            // 
+            resources.ApplyResources(this.UpdateServ, "UpdateServ");
+            this.UpdateServ.Name = "UpdateServ";
+            this.UpdateServ.UseVisualStyleBackColor = true;
+            this.UpdateServ.Click += new System.EventHandler(this.UpdateServ_Click);
+            // 
+            // UpdateSoft
+            // 
+            resources.ApplyResources(this.UpdateSoft, "UpdateSoft");
+            this.UpdateSoft.Name = "UpdateSoft";
+            this.UpdateSoft.UseVisualStyleBackColor = true;
+            this.UpdateSoft.Click += new System.EventHandler(this.UpdateSoft_Click);
+            // 
+            // label32
+            // 
+            resources.ApplyResources(this.label32, "label32");
+            this.label32.Name = "label32";
+            // 
+            // label31
+            // 
+            resources.ApplyResources(this.label31, "label31");
+            this.label31.Name = "label31";
+            // 
+            // InstalledServ
+            // 
+            resources.ApplyResources(this.InstalledServ, "InstalledServ");
+            this.InstalledServ.Name = "InstalledServ";
+            // 
+            // NewSoft
+            // 
+            resources.ApplyResources(this.NewSoft, "NewSoft");
+            this.NewSoft.Name = "NewSoft";
+            // 
+            // InstalledSoft
+            // 
+            resources.ApplyResources(this.InstalledSoft, "InstalledSoft");
+            this.InstalledSoft.Name = "InstalledSoft";
+            // 
+            // label17
+            // 
+            resources.ApplyResources(this.label17, "label17");
+            this.label17.Name = "label17";
+            // 
+            // Note3
+            // 
+            resources.ApplyResources(this.Note3, "Note3");
+            this.Note3.Name = "Note3";
+            // 
+            // Minute3
+            // 
+            resources.ApplyResources(this.Minute3, "Minute3");
+            this.Minute3.Name = "Minute3";
+            // 
+            // Hour3
+            // 
+            resources.ApplyResources(this.Hour3, "Hour3");
+            this.Hour3.Name = "Hour3";
+            // 
+            // Note2
+            // 
+            resources.ApplyResources(this.Note2, "Note2");
+            this.Note2.Name = "Note2";
+            // 
+            // Minute2
+            // 
+            resources.ApplyResources(this.Minute2, "Minute2");
+            this.Minute2.Name = "Minute2";
+            // 
+            // Hour2
+            // 
+            resources.ApplyResources(this.Hour2, "Hour2");
+            this.Hour2.Name = "Hour2";
+            // 
+            // Note1
+            // 
+            resources.ApplyResources(this.Note1, "Note1");
+            this.Note1.Name = "Note1";
+            // 
+            // Minute1
+            // 
+            resources.ApplyResources(this.Minute1, "Minute1");
+            this.Minute1.Name = "Minute1";
+            // 
+            // Hour1
+            // 
+            resources.ApplyResources(this.Hour1, "Hour1");
+            this.Hour1.Name = "Hour1";
+            // 
+            // label29
+            // 
+            resources.ApplyResources(this.label29, "label29");
+            this.label29.Name = "label29";
+            // 
+            // LTIME
+            // 
+            resources.ApplyResources(this.LTIME, "LTIME");
+            this.LTIME.Name = "LTIME";
+            // 
+            // label8
+            // 
+            resources.ApplyResources(this.label8, "label8");
+            this.label8.Name = "label8";
+            // 
+            // label23
+            // 
+            resources.ApplyResources(this.label23, "label23");
+            this.label23.Name = "label23";
+            // 
+            // checkBox3
+            // 
+            resources.ApplyResources(this.checkBox3, "checkBox3");
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            // 
+            // label20
+            // 
+            resources.ApplyResources(this.label20, "label20");
+            this.label20.Name = "label20";
+            // 
+            // checkBox2
+            // 
+            resources.ApplyResources(this.checkBox2, "checkBox2");
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // EditSch1
+            // 
+            resources.ApplyResources(this.EditSch1, "EditSch1");
+            this.EditSch1.Name = "EditSch1";
+            this.EditSch1.UseVisualStyleBackColor = true;
+            this.EditSch1.Click += new System.EventHandler(this.EditSch1_Click);
+            // 
+            // label12
+            // 
+            resources.ApplyResources(this.label12, "label12");
+            this.label12.Name = "label12";
+            // 
+            // label11
+            // 
+            resources.ApplyResources(this.label11, "label11");
+            this.label11.Name = "label11";
+            // 
+            // label10
+            // 
+            resources.ApplyResources(this.label10, "label10");
+            this.label10.Name = "label10";
+            // 
+            // checkBox1
+            // 
+            resources.ApplyResources(this.checkBox1, "checkBox1");
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // label28
             // 
@@ -661,147 +898,6 @@
             this.BoxPathServer.Name = "BoxPathServer";
             this.BoxPathServer.ReadOnly = true;
             // 
-            // groupBox1
-            // 
-            resources.ApplyResources(this.groupBox1, "groupBox1");
-            this.groupBox1.Controls.Add(this.Note3);
-            this.groupBox1.Controls.Add(this.Minute3);
-            this.groupBox1.Controls.Add(this.Hour3);
-            this.groupBox1.Controls.Add(this.Note2);
-            this.groupBox1.Controls.Add(this.Minute2);
-            this.groupBox1.Controls.Add(this.Hour2);
-            this.groupBox1.Controls.Add(this.Note1);
-            this.groupBox1.Controls.Add(this.Minute1);
-            this.groupBox1.Controls.Add(this.Hour1);
-            this.groupBox1.Controls.Add(this.label29);
-            this.groupBox1.Controls.Add(this.LTIME);
-            this.groupBox1.Controls.Add(this.label8);
-            this.groupBox1.Controls.Add(this.label23);
-            this.groupBox1.Controls.Add(this.checkBox3);
-            this.groupBox1.Controls.Add(this.label20);
-            this.groupBox1.Controls.Add(this.checkBox2);
-            this.groupBox1.Controls.Add(this.EditSch1);
-            this.groupBox1.Controls.Add(this.label12);
-            this.groupBox1.Controls.Add(this.label11);
-            this.groupBox1.Controls.Add(this.label10);
-            this.groupBox1.Controls.Add(this.checkBox1);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.TabStop = false;
-            // 
-            // Note3
-            // 
-            resources.ApplyResources(this.Note3, "Note3");
-            this.Note3.Name = "Note3";
-            // 
-            // Minute3
-            // 
-            resources.ApplyResources(this.Minute3, "Minute3");
-            this.Minute3.Name = "Minute3";
-            this.Minute3.Click += new System.EventHandler(this.Label33_Click);
-            // 
-            // Hour3
-            // 
-            resources.ApplyResources(this.Hour3, "Hour3");
-            this.Hour3.Name = "Hour3";
-            // 
-            // Note2
-            // 
-            resources.ApplyResources(this.Note2, "Note2");
-            this.Note2.Name = "Note2";
-            // 
-            // Minute2
-            // 
-            resources.ApplyResources(this.Minute2, "Minute2");
-            this.Minute2.Name = "Minute2";
-            // 
-            // Hour2
-            // 
-            resources.ApplyResources(this.Hour2, "Hour2");
-            this.Hour2.Name = "Hour2";
-            // 
-            // Note1
-            // 
-            resources.ApplyResources(this.Note1, "Note1");
-            this.Note1.Name = "Note1";
-            // 
-            // Minute1
-            // 
-            resources.ApplyResources(this.Minute1, "Minute1");
-            this.Minute1.Name = "Minute1";
-            // 
-            // Hour1
-            // 
-            resources.ApplyResources(this.Hour1, "Hour1");
-            this.Hour1.Name = "Hour1";
-            // 
-            // label29
-            // 
-            resources.ApplyResources(this.label29, "label29");
-            this.label29.Name = "label29";
-            // 
-            // LTIME
-            // 
-            resources.ApplyResources(this.LTIME, "LTIME");
-            this.LTIME.Name = "LTIME";
-            // 
-            // label8
-            // 
-            resources.ApplyResources(this.label8, "label8");
-            this.label8.Name = "label8";
-            // 
-            // label23
-            // 
-            resources.ApplyResources(this.label23, "label23");
-            this.label23.Name = "label23";
-            // 
-            // checkBox3
-            // 
-            resources.ApplyResources(this.checkBox3, "checkBox3");
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.UseVisualStyleBackColor = true;
-            this.checkBox3.CheckedChanged += new System.EventHandler(this.CheckBox3_CheckedChanged);
-            // 
-            // label20
-            // 
-            resources.ApplyResources(this.label20, "label20");
-            this.label20.Name = "label20";
-            // 
-            // checkBox2
-            // 
-            resources.ApplyResources(this.checkBox2, "checkBox2");
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.CheckBox2_CheckedChanged);
-            // 
-            // EditSch1
-            // 
-            resources.ApplyResources(this.EditSch1, "EditSch1");
-            this.EditSch1.Name = "EditSch1";
-            this.EditSch1.UseVisualStyleBackColor = true;
-            this.EditSch1.Click += new System.EventHandler(this.EditSch1_Click_1);
-            // 
-            // label12
-            // 
-            resources.ApplyResources(this.label12, "label12");
-            this.label12.Name = "label12";
-            // 
-            // label11
-            // 
-            resources.ApplyResources(this.label11, "label11");
-            this.label11.Name = "label11";
-            // 
-            // label10
-            // 
-            resources.ApplyResources(this.label10, "label10");
-            this.label10.Name = "label10";
-            // 
-            // checkBox1
-            // 
-            resources.ApplyResources(this.checkBox1, "checkBox1");
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.CheckBox1_CheckedChanged);
-            // 
             // RSTART
             // 
             resources.ApplyResources(this.RSTART, "RSTART");
@@ -816,13 +912,6 @@
             this.linkLabel2.TabStop = true;
             this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel2_LinkClicked);
             // 
-            // linkLabel3
-            // 
-            resources.ApplyResources(this.linkLabel3, "linkLabel3");
-            this.linkLabel3.Name = "linkLabel3";
-            this.linkLabel3.TabStop = true;
-            this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel3_LinkClicked);
-            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
@@ -833,7 +922,6 @@
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.Controls.Add(this.linkLabel3);
             this.Controls.Add(this.linkLabel2);
             this.Controls.Add(this.RSTART);
             this.Controls.Add(this.tabControl1);
@@ -856,8 +944,6 @@
             this.contextMenuStrip1.ResumeLayout(false);
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -918,15 +1004,11 @@
         private System.Windows.Forms.ToolStripMenuItem stopToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem restartToolStripMenuItem;
         private System.Windows.Forms.TabPage tabPage5;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label LTIME;
-        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Button BrowserFolder;
         private System.Windows.Forms.TextBox BoxPathServer;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
         private System.Windows.Forms.ToolStripMenuItem kickToolStripMenuItem;
-        private System.Windows.Forms.LinkLabel linkLabel3;
         private System.Windows.Forms.Button CN;
         private System.Windows.Forms.Button ClearCache;
         private System.Windows.Forms.CheckBox optClearCache;
@@ -945,16 +1027,13 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.TextBox PublicServerFile;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.Label label23;
-        private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.CheckBox checkBox2;
-        private System.Windows.Forms.Button EditSch1;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Timer timer1;
+        public System.Windows.Forms.ComboBox ThemeSelect;
+        private System.Windows.Forms.Label CpuText;
+        private System.Windows.Forms.ToolStripMenuItem enableToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enableToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem disableToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem;
         private System.Windows.Forms.Label Note3;
         private System.Windows.Forms.Label Minute3;
         private System.Windows.Forms.Label Hour3;
@@ -964,8 +1043,27 @@
         private System.Windows.Forms.Label Note1;
         private System.Windows.Forms.Label Minute1;
         private System.Windows.Forms.Label Hour1;
-        private System.Windows.Forms.Timer timer1;
-        public System.Windows.Forms.ComboBox ThemeSelect;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Label LTIME;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.Button EditSch1;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Label InstalledServ;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.CheckBox ShowNotifyUp;
+        private System.Windows.Forms.Button UpdateServ;
+        private System.Windows.Forms.Button UpdateSoft;
+        public System.Windows.Forms.Label NewSoft;
+        public System.Windows.Forms.Label InstalledSoft;
     }
 }
 

@@ -8,3 +8,6 @@ C:\Users\okisu\Documents\Server Manager for Fivem\Server Manager for Fivem\obj\R
 C:\Users\okisu\Documents\Server Manager for Fivem\Server Manager for Fivem\obj\Release\Server Manager for Fivem.exe
 C:\Users\okisu\Documents\Server Manager for Fivem\Server Manager for Fivem\obj\Release\Server Manager for Fivem.pdb
 C:\Users\okisu\Documents\Server Manager for Fivem\Server Manager for Fivem\obj\Release\Fivem_Server_Manager.EditSchedule.resources
+C:\Users\okisu\Documents\Myproject\Fivem Server Manager\Release\Server Manager for Fivem.exe.config
+C:\Users\okisu\Documents\Server Manager for Fivem\Server Manager for Fivem\obj\Release\Server_Manager_for_Fivem.RenameResource.resources
+C:\Users\okisu\Documents\Server Manager for Fivem\Server Manager for Fivem\obj\Release\Server Manager for Fivem.csproj.CopyComplete

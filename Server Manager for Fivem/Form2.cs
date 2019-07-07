@@ -19,7 +19,7 @@ namespace Fivem_Server_Manager
         public InstallResource()
         {
             InitializeComponent();
-
+            Tips();
 
 
         }
@@ -29,6 +29,12 @@ namespace Fivem_Server_Manager
 
         }
 
+        void Tips()
+        {
+            ToolTip info = new ToolTip();
+            info.AutoPopDelay = 5000;
+            info.SetToolTip(comboBox1, "Select Type/Category of New Resource");
+        }
 
         static long GetFolderSize(string s)
         {
@@ -144,7 +150,7 @@ namespace Fivem_Server_Manager
                
 
             }
-
+            
             progressBar1.Value = 0;                                    
         }
 

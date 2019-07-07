@@ -64,6 +64,26 @@ namespace Fivem_Server_Manager
             {
 
             }
+            Tips();
+        }
+
+        void Tips()
+        {
+            ToolTip info = new ToolTip();
+            info.InitialDelay = 0;
+            info.AutoPopDelay = 10000;
+            info.SetToolTip(ExcCmmMnt1, "Minute Before Execute Command \n" +
+                "Example: if is typed 10 and the schedule 6:00. The Command Will Execute on 5:50 \n" +
+                "Note: Make Sure you Enable the Schedule");
+            info.SetToolTip(ExcCmmMnt2, "Minute Before Execute Command \n" +
+                "Example: if is typed 10 and the schedule 6:00. The Command Will Execute on 5:50 \n" +
+                "Note: Make Sure you Enable the Schedule");
+            info.SetToolTip(ExcCmmMnt3, "Minute Before Execute Command \n" +
+                "Example: if is typed 10 and the schedule 6:00. The Command Will Execute on 5:50 \n" +
+                "Note: Make Sure you Enable the Schedule");
+            info.SetToolTip(Cmd1, "Command to Execute Before Restart");
+            info.SetToolTip(Cmd2, "Command to Execute Before Restart");
+            info.SetToolTip(Cmd3, "Command to Execute Before Restart");
 
         }
 

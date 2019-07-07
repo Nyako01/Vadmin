@@ -7,23 +7,27 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Http;
 using System.Text;
 using System.Data;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
+using Server_Manager_for_Fivem;
+
 
 namespace Fivem_Server_Manager
 {
     public partial class Form1 : Form
     {
 
-        string appversion = "1.5";
+        string appversion = "1.6";
 
         string FileConfigServer1, FileConfigServer2;
         public static string SelectFileConfigServer = "";
         string FileConfigApp = "Config.cfg";
         public static string LocationFivemServer = "";
+        public static string Theme = "";
         string ServerName = "";
         string License = "";
         string Tcp = "";
@@ -45,7 +49,7 @@ namespace Fivem_Server_Manager
         int playerDetected2 = 0;
         int intervalCheckPlayer = 5;
 
-        string SelectedResource, SelectedId, CategoryResource;
+        public static string SelectedResource, SelectedId, CategoryResource, Rstat1, Rstat2;
         string Hour, Minute, Second;
         public string SchHour1, SchMinute1, ExcCmdMnt1 = "", ExcCmd1 = "", SchHour2, SchMinute2, ExcCmdMnt2 = "", ExcCmd2 = "", SchHour3, SchMinute3, ExcCmdMnt3 = "", ExcCmd3 = "";
         int ClearCacheCfg, OSync, Servermode;
@@ -67,7 +71,7 @@ namespace Fivem_Server_Manager
         bool ServerStarted = false;
         // bool ServerStoped = false;
         bool isrunning = false;
-        int selecteditem = -1;
+        //int selecteditem = -1;
 
         bool checkinternet()
         {
@@ -75,7 +79,8 @@ namespace Fivem_Server_Manager
             PingReply checknet = pinger.Send("8.8.8.8");
             return checknet.Status == IPStatus.Success;
         }
-      
+
+
 
         public Form1()
         {
@@ -83,43 +88,6 @@ namespace Fivem_Server_Manager
 
             File.Delete("Debug.txt");
             //ServerMode.Text = "Test Server";
-            using (WebClient client = new WebClient())
-            {
-
-
-                if (!checkinternet())
-                {
-                    MessageBox.Show("Failed to Check New Version. Please Check Your Internet Connection", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
-
-                    WriteToFileThreadSafe(">Checking Version", "Debug.txt");
-
-                    string s = client.DownloadString("https://raw.githubusercontent.com/Oky12/FivemServerManager/master/Version");
-                    Console.WriteLine(s);
-
-                    int a = s.IndexOf(appversion);
-
-                    WriteToFileThreadSafe(">New Version " + s + ">Installed Version " + appversion, "Debug.txt");
-
-                    if (a == -1)
-                    {
-                        DialogResult result = MessageBox.Show("New Version is Available. Do you want to Download now?", "Check for Update",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                        if (result == DialogResult.Yes)
-                        {
-
-                            WriteToFileThreadSafe(">Open Browser to Download Page" + a, "Debug.txt");
-
-                            Process.Start("https://github.com/Oky12/FivemServerManager/releases");
-                            StopProc("Fivem Server Manager");
-                        }
-                    }
-                }
-            }
-            //WebClient ahy = new WebClient();
-            //ahy.DownloadFileAsync(new Uri("https://github-production-release-asset-2e65be.s3.amazonaws.com/190100356/bdc57880-912a-11e9-97c9-c436c3751906?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20190618%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20190618T081446Z&X-Amz-Expires=300&X-Amz-Signature=369b2498f38d33162df84913d084ae4263f20b132c67a7ad82d2b82af64ea3a0&X-Amz-SignedHeaders=host&actor_id=30838114&response-content-disposition=attachment%3B%20filename%3DFivemServerManager_1.4.zip&response-content-type=application%2Foctet-stream"), "1.4.zip");
 
             PlayerList.Columns.Add("ID", 40);
             PlayerList.Columns.Add("NAME", 150);
@@ -134,10 +102,10 @@ namespace Fivem_Server_Manager
             //Thread Servermodeselect = new Thread(ServerModeCheck);
             //Servermodeselect.Start();
 
-            
+
             //Thread PG = new Thread(CreateLListener);
             // PG.Start();
-
+            Tips();
             ReadConfig();
             if (IsProcessOpen("FXServer"))
             {
@@ -147,6 +115,21 @@ namespace Fivem_Server_Manager
 
 
         }
+
+        void Tips()
+        {
+            
+            ToolTip tips = new ToolTip();
+            tips.AutoPopDelay = 5000;
+            tips.SetToolTip(Kall, "Kick All Online Player");
+            tips.SetToolTip(ServerMode, "Select Different Configuration For Start Server for Public or for Test a Resource");
+            tips.SetToolTip(OSyc, "Option to Enable Advanced Feature of Fivem Server");
+            tips.SetToolTip(ClearCache, "Clear/Delete cache Folder");
+            tips.SetToolTip(UpdateSoft, "Download Latest Version of Server Manager for Fivem");
+            tips.SetToolTip(UpdateServ, "Visit Download Page Fivem Server");
+
+        }
+
 
         private void Form1_FormClosing(Object sender, FormClosingEventArgs e)
         {
@@ -178,6 +161,87 @@ namespace Fivem_Server_Manager
 
         }
 
+        DialogResult result;
+        bool ShowMessage = false;
+        string NewProgram;
+        void AutoCheckUpdate(object source, ElapsedEventArgs e)
+        {
+            WebClient client = new WebClient();
+
+            if (!checkinternet() && ShowNotifyUp.Checked)
+            {
+                AutoClosingMessageBox.Show("Failed to Check New Version. Please Check Your Internet Connection", "Error", 2000);
+                //MessageBox.Show("Failed to Check New Version. Please Check Your Internet Connection", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+
+                //WriteToFileThreadSafe(">Checking Version", "Debug.txt");
+
+                string s = client.DownloadString("https://raw.githubusercontent.com/Oky12/FivemServerManager/master/Version");
+                Console.WriteLine(s);
+                NewProgram = s;
+                int a = s.IndexOf(appversion);
+
+                //WriteToFileThreadSafe(">New Version " + s + ">Installed Version " + appversion, "Debug.txt");
+                InstalledSoft.BeginInvoke(new MethodInvoker(() => InstalledSoft.Text = "Installed: V" + appversion));
+                NewSoft.BeginInvoke(new MethodInvoker(() => NewSoft.Text = "New: V" + s));
+
+                if (a == -1)
+                {
+                    if (!ShowMessage && ShowNotifyUp.Checked)
+                    {
+                        ShowMessage = true;
+                        result = MessageBox.Show("New Version of Server Manager for Fivem is Available. Click YES to Visit Download Page or Click NO to Hide This Message and Enable Update Button", "Check for Update",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
+                    }
+                    if (result == DialogResult.Yes)
+                    {
+                        result = DialogResult.OK;
+                        //ShowMessage = false;
+                        WriteToFileThreadSafe(">Open Browser to Download Page" + a, "Debug.txt");
+
+                        Process.Start("https://github.com/Oky12/FivemServerManager/releases");
+                        //StopProc("Fivem Server Manager");
+                    }
+                    else
+                    {
+                        ShowMessage = false;
+                        UpdateSoft.BeginInvoke(new MethodInvoker(() => UpdateSoft.Enabled = true));
+                        ShowNotifyUp.BeginInvoke(new MethodInvoker(() => ShowNotifyUp.Checked = false));
+
+                    }
+                }
+
+                if (isrunning && ServerStarted)
+                {
+                    //WriteToFileThreadSafe(">Checking Version", "Debug.txt");                   
+                    int Lip = Tcp.Length;
+                    int Iip = Tcp.IndexOf(":");
+                    string ip = Tcp.Substring(0, Iip);
+                    string port = Tcp.Substring(Iip + 1, Lip - (Iip + 1));
+                    WriteToFileThreadSafe(">Get Installed Version from" + ip + port, "Debug.txt");
+                    string DataLocalVer = "";
+                    if (ip == "0.0.0.0")
+                    {
+                        DataLocalVer = client.DownloadString("http://127.0.0.1:" + port + "/info.json");
+                    }
+                    else
+                    {
+                        DataLocalVer = client.DownloadString("http://" + ip + ":" + port + "/info.json");
+                    }
+                    int c = DataLocalVer.IndexOf("SERVER v1");
+                    c = c + 14;
+                    string LocalVer = DataLocalVer.Substring(c, 4);
+                    // WriteToFileThreadSafe(">Get Version " + LocalVer, "Debug.txt");
+                    InstalledServ.BeginInvoke(new MethodInvoker(() => InstalledServ.Text = "Installed: V" + LocalVer));
+
+
+                }
+            }
+        }
+
         void addRowPlayerList(string id, string name, string ip, string ping)
         {
             string[] Row = { id, name, ip, ping };
@@ -205,9 +269,10 @@ namespace Fivem_Server_Manager
                 //button1.Enabled = false;
                 //BrowserFolder.Enabled = false;
                 contextMenuStrip1.Items[0].Enabled = false;
-                contextMenuStrip1.Items[1].Enabled = true;
+                contextMenuStrip1.Items[1].Enabled = false;
                 contextMenuStrip1.Items[2].Enabled = true;
                 contextMenuStrip1.Items[3].Enabled = true;
+                contextMenuStrip1.Items[4].Enabled = true;
                 contextMenuStrip2.Items[0].Enabled = true;
             }
             if (isrunning && !ServerStarted)
@@ -221,9 +286,10 @@ namespace Fivem_Server_Manager
                 //button1.Enabled = true;
                 //BrowserFolder.Enabled = true;
                 contextMenuStrip1.Items[0].Enabled = true;
-                contextMenuStrip1.Items[1].Enabled = false;
+                contextMenuStrip1.Items[1].Enabled = true;
                 contextMenuStrip1.Items[2].Enabled = false;
                 contextMenuStrip1.Items[3].Enabled = false;
+                contextMenuStrip1.Items[4].Enabled = false;
                 contextMenuStrip2.Items[0].Enabled = false;
             }
 
@@ -1011,19 +1077,19 @@ namespace Fivem_Server_Manager
         void Schedule(object source, ElapsedEventArgs e)
         {
 
-            
+
             int H = 0;
-            if (Hour != null) {  H = Int32.Parse(Hour); }
+            if (Hour != null) { H = Int32.Parse(Hour); }
             int H1 = Int32.Parse(SchHour1);
             int H2 = Int32.Parse(SchHour2);
             int H3 = Int32.Parse(SchHour3);
             int M = 0;
-            if (Minute != null) {  M = Int32.Parse(Minute); }
+            if (Minute != null) { M = Int32.Parse(Minute); }
             int M1 = Int32.Parse(SchMinute1);
             int M2 = Int32.Parse(SchMinute2);
             int M3 = Int32.Parse(SchMinute3);
 
-           // Console.WriteLine(H + ":" + M);
+            // Console.WriteLine(H + ":" + M);
             int excH1 = H1;
             int excM1 = M1 - Int32.Parse(ExcCmdMnt1);
             if (excM1 < 0)
@@ -1063,7 +1129,7 @@ namespace Fivem_Server_Manager
                 AutoRestart();
                 AutoClosingMessageBox.Show("Server Restart On Schedule 1", "Info", 1000);
                 //MessageBox.Show("Server Restart On Schedule 1", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                
+
             }
             if (Hour != Hour1.Text || Minute != Minute1.Text)
             {
@@ -1128,7 +1194,7 @@ namespace Fivem_Server_Manager
         }
         void Time(object source, ElapsedEventArgs e)
         {
-            
+
             //for (int i = 0; i < 10; i++)
             //{
 
@@ -1138,14 +1204,13 @@ namespace Fivem_Server_Manager
             Second = LocalTime.Second.ToString();
             printTime(Hour + ":" + Minute + ":" + Second);
             //Thread.Sleep(1000);
-
-
+            
             CheckStatusTime++;
-            Console.WriteLine(CheckStatusTime);
+            //Console.WriteLine(CheckStatusTime);
             if (CheckStatusTime >= intervalCheckPlayer && isrunning && ServerStarted)
             {
                 Console.WriteLine("send status");
-               // WriteToFileThreadSafe("send status", "Debug.txt");
+                // WriteToFileThreadSafe("send status", "Debug.txt");
                 PlayerList.Items.Clear();
                 StreamWriter Send = proc.StandardInput;
                 Send.WriteLine("status");
@@ -1270,10 +1335,16 @@ namespace Fivem_Server_Manager
             }
             else
             {
+                progressBarForm.FormClosed += ResourceInstaller;
                 progressBarForm.ShowDialog();
                 //Task task = new Task(RunComparisons);
                 // task.Start();
             }
+        }
+
+        void ResourceInstaller(object sender, FormClosedEventArgs e)
+        {
+            ReadConfig();
         }
 
         public void RunComparisons()
@@ -1287,7 +1358,12 @@ namespace Fivem_Server_Manager
             progressBarForm.BeginInvoke(new MethodInvoker(() => progressBarForm.Close()));
         }
 
-
+        void getstatus(object sender, ElapsedEventArgs e)
+        {
+            WebClient readstatus = new WebClient();
+            string oi = readstatus.DownloadString("http://192.168.100.126:44518/");
+            //Console.WriteLine(oi);
+        }
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -1305,6 +1381,13 @@ namespace Fivem_Server_Manager
             cTimer.Elapsed += new ElapsedEventHandler(Schedule);
             cTimer.Interval = 500;
             cTimer.Enabled = true;
+
+            System.Timers.Timer dTimer = new System.Timers.Timer();
+            dTimer.Elapsed += new ElapsedEventHandler(AutoCheckUpdate);
+            dTimer.Interval = 5000;
+            dTimer.Enabled = true;
+
+
             //WebClient client = new WebClient();
             //client.DownloadProgressChanged += Client_DownloadProgress;
 
@@ -1317,12 +1400,26 @@ namespace Fivem_Server_Manager
             if (CategoryResource == "OutESXFolder")
             {
                 DeleteLinesFromFile(SelectFileConfigServer, SelectedResource);
-                Directory.Delete(outESX + SelectedResource, true);
+                if (Directory.Exists(outESX + SelectedResource))
+                {
+                    Directory.Delete(outESX + SelectedResource, true);
+                }
+                else
+                {
+                    MessageBox.Show("Resources " + SelectedResource + " Folder Not Found or Already Deleted", "Caution", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
             if (CategoryResource == "InESXFolder")
             {
                 DeleteLinesFromFile(SelectFileConfigServer, SelectedResource);
-                Directory.Delete(inESX + SelectedResource, true);
+                if (Directory.Exists(outESX + SelectedResource))
+                {
+                    Directory.Delete(inESX + SelectedResource, true);
+                }
+                else
+                {
+                    MessageBox.Show("Resources " + SelectedResource + " Folder Not Found or Already Deleted", "Caution", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
             ReadConfig();
         }
@@ -1498,8 +1595,12 @@ namespace Fivem_Server_Manager
         private void StartToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-            if (isrunning && selecteditem != -1)
+            if (isrunning)
             {
+                ResourceList.SelectedItems[0].SubItems[0].Text = SelectedResource;
+                ResourceList.SelectedItems[0].SubItems[1].Text = CategoryResource;
+                ResourceList.SelectedItems[0].SubItems[2].Text = Rstat1;
+                ResourceList.SelectedItems[0].SubItems[3].Text = "Start";
                 StreamWriter Send = proc.StandardInput;
                 Send.WriteLine("start " + SelectedResource);
             }
@@ -1528,7 +1629,7 @@ namespace Fivem_Server_Manager
                 OneSync = false;
             }
         }
-
+        
         private void PlayerList_MouseClick(object sender, MouseEventArgs e)
         {
             string id = PlayerList.SelectedItems[0].SubItems[0].Text;
@@ -1541,6 +1642,7 @@ namespace Fivem_Server_Manager
             // int c = 0;
             if (ThemeSelect.SelectedIndex == 1)
             {
+                Theme = "Dark";
                 Console.WriteLine("Dark Theme Selected");
                 this.BackColor = Color.FromArgb(64, 64, 64);
                 label2.ForeColor = Color.White;
@@ -1599,7 +1701,17 @@ namespace Fivem_Server_Manager
                 PublicServerFile.ForeColor = Color.White;
                 TestServerFile.BackColor = Color.FromArgb(64, 64, 64);
                 TestServerFile.ForeColor = Color.White;
-                groupBox1.ForeColor = Color.White;
+                label31.ForeColor = Color.White;
+                label17.ForeColor = Color.White;
+                label32.ForeColor = Color.White;
+                UpdateServ.ForeColor = Color.White;
+                UpdateServ.BackColor = Color.FromArgb(64, 64, 64);
+                UpdateSoft.ForeColor = Color.White;
+                UpdateSoft.BackColor = Color.FromArgb(64, 64, 64);
+                InstalledServ.ForeColor = Color.White;
+                InstalledSoft.ForeColor = Color.White;
+                NewSoft.ForeColor = Color.White;
+                ShowNotifyUp.ForeColor = Color.White;
                 EditSch1.ForeColor = Color.White;
                 EditSch1.BackColor = Color.FromArgb(64, 64, 64);
 
@@ -1688,6 +1800,7 @@ namespace Fivem_Server_Manager
             }
             else
             {
+                Theme = "Default";
                 Console.WriteLine("Default Theme Selected");
 
                 this.BackColor = Color.White;
@@ -1747,9 +1860,19 @@ namespace Fivem_Server_Manager
                 PublicServerFile.ForeColor = Color.Black;
                 TestServerFile.BackColor = Color.White;
                 TestServerFile.ForeColor = Color.Black;
-                groupBox1.ForeColor = Color.Black;
                 EditSch1.ForeColor = Color.Black;
                 EditSch1.UseVisualStyleBackColor = true;
+                label31.ForeColor = Color.Black;
+                label17.ForeColor = Color.Black;
+                label32.ForeColor = Color.Black;
+                UpdateServ.ForeColor = Color.Black;
+                UpdateServ.UseVisualStyleBackColor = true;
+                UpdateSoft.ForeColor = Color.Black;
+                UpdateSoft.UseVisualStyleBackColor = true;
+                InstalledServ.ForeColor = Color.Black;
+                InstalledSoft.ForeColor = Color.Black;
+                NewSoft.ForeColor = Color.Black;
+                ShowNotifyUp.ForeColor = Color.Black;
 
                 //Theme Tab resource Manager
                 tabPage4.BackColor = Color.White;
@@ -1842,6 +1965,65 @@ namespace Fivem_Server_Manager
             TabColors[page] = color;
             tabControl1.Invalidate();
         }
+
+        private void Timer2_Tick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void EnableToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            string EnR = "start " + SelectedResource;
+            OverWrite(SelectFileConfigServer, SelectedResource, EnR);
+            ReadConfig();
+        }
+
+        private void UpdateServ_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://runtime.fivem.net/artifacts/fivem/build_server_windows/master/");
+        }
+
+        private void UpdateSoft_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/Oky12/ServerManagerForFivem/releases/download/V" + NewProgram + "/Server_Manager_for_Fivem_" + NewProgram + ".zip");
+        }
+
+        private void ContextMenuStrip1_Opened(object sender, EventArgs e)
+        {
+            enableToolStripMenuItem1.ToolTipText = "Set to Enable " + SelectedResource + " and Start the Resources when Starting Server";
+            disableToolStripMenuItem.ToolTipText = "Set to Disable " + SelectedResource + " and not Start the Resources when Starting Server";
+            renameToolStripMenuItem.ToolTipText = "Change Name of " + SelectedResource + " in " + SelectFileConfigServer + " and Change Name Folder too";
+            startToolStripMenuItem.ToolTipText = "Start " + SelectedResource + " Resources When Server Started";
+            stopToolStripMenuItem.ToolTipText = "Stop " + SelectedResource + " Resources When Server Started";
+            restartToolStripMenuItem.ToolTipText = "Restart " + SelectedResource + " Resources When Resources & Server Started";
+        }
+
+        private void EditSch1_Click(object sender, EventArgs e)
+        {
+            EditSchedule edit = new EditSchedule(this);
+
+            edit.ShowDialog();
+        }
+
+        private void DisableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string DnR = "#start " + SelectedResource;
+            OverWrite(SelectFileConfigServer, SelectedResource, DnR);
+            ReadConfig();
+        }
+
+        private void RenameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RenameResource Rename = new RenameResource();
+            Rename.FormClosed += Rname;
+            Rename.ShowDialog();
+        }
+
+        void Rname(object sender, FormClosedEventArgs e)
+        {
+            ReadConfig();
+        }
+
         private void TabControl1_DrawItem(object sender, DrawItemEventArgs e)
         {
             //e.DrawBackground();
@@ -1874,7 +2056,7 @@ namespace Fivem_Server_Manager
                 AutoClosingMessageBox.Show("Kicking " + playerDetected2 + " Player", "Info", 2000);
                 playerDetected2 = 0;
                 PlayerList.Items.Clear();
-                
+
             }
         }
         private void Kall_Click(object sender, EventArgs e)
@@ -1887,6 +2069,11 @@ namespace Fivem_Server_Manager
         {
             if (isrunning)
             {
+                ResourceList.SelectedItems[0].SubItems[0].Text = SelectedResource;
+                ResourceList.SelectedItems[0].SubItems[1].Text = CategoryResource;
+                ResourceList.SelectedItems[0].SubItems[2].Text = Rstat1;
+                ResourceList.SelectedItems[0].SubItems[3].Text = "Stop";
+
                 StreamWriter Send = proc.StandardInput;
                 Send.WriteLine("stop " + SelectedResource);
             }
@@ -1894,10 +2081,15 @@ namespace Fivem_Server_Manager
 
         private void RestartToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (isrunning)
+            if (isrunning && Rstat2 == "Start")
             {
                 StreamWriter Send = proc.StandardInput;
                 Send.WriteLine("restart " + SelectedResource);
+            }
+            else
+            {
+                MessageBox.Show(SelectedResource + "Resources Not Started. Please Start the Resources to use this Option"
+                    , "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1995,6 +2187,12 @@ namespace Fivem_Server_Manager
 
         private void ResourceList_MouseClick(object sender, MouseEventArgs e)
         {
+            string Stat2 = ResourceList.SelectedItems[0].SubItems[3].Text;
+            Console.WriteLine(Stat2);
+            Rstat2 = Stat2;
+            string Stat1 = ResourceList.SelectedItems[0].SubItems[2].Text;
+            Console.WriteLine(Stat1);
+            Rstat1 = Stat1;
             string category = ResourceList.SelectedItems[0].SubItems[1].Text;
             Console.WriteLine(category);
             CategoryResource = category;
@@ -2003,68 +2201,6 @@ namespace Fivem_Server_Manager
             SelectedResource = Resource;
         }
 
-        private void LinkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            if (!checkinternet())
-            {
-                MessageBox.Show("Failed to Check New Version. Please Check Your Internet Connection", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                if (isrunning && ServerStarted)
-                {
-
-                    using (WebClient client = new WebClient())
-                    {
-
-                        string DataNewVer = client.DownloadString("https://runtime.fivem.net/artifacts/fivem/build_server_windows/master/");
-                        int b = DataNewVer.IndexOf("</tr><tr>");
-                        b = b + 22;
-                        string NewV = DataNewVer.Substring(b, 4);
-
-                        int Lip = Tcp.Length;
-                        int Iip = Tcp.IndexOf(":");
-                        string ip = Tcp.Substring(0, Iip);
-                        string port = Tcp.Substring(Iip + 1, Lip - (Iip + 1));
-
-                        string DataLocalVer = "";
-                        if (ip == "0.0.0.0")
-                        {
-                            DataLocalVer = client.DownloadString("http://127.0.0.1:" + port + "/info.json");
-                        }
-                        else
-                        {
-                            DataLocalVer = client.DownloadString("http://" + ip + ":" + port + "/info.json");
-                        }
-                        int c = DataLocalVer.IndexOf("SERVER v1");
-                        c = c + 14;
-                        string LocalVer = DataLocalVer.Substring(c, 4);
-
-                        SetText("new version" + NewV);
-                        SetText("Installed version" + LocalVer);
-                        if (NewV != LocalVer)
-                        {
-                            DialogResult result = MessageBox.Show("New Version of Fivem Server Windows is Available. Do you want to download now?", "New Version",
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-                            if (result == DialogResult.Yes)
-                            {
-                                Process.Start("https://runtime.fivem.net/artifacts/fivem/build_server_windows/master/");
-                            }
-
-                        }
-                        else
-                        {
-                            MessageBox.Show("Your Fivem Server is the latest version", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Please Start Server to check Server Version", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                }
-            }
-        }
 
         private void CN_Click(object sender, EventArgs e)
         {
