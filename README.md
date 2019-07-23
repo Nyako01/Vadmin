@@ -26,7 +26,8 @@ This is a tool to easily manage server fivem
 * Information About Version of Program and Server in Setting
 * Auto Check Version Program and Server every 5 Second
 ## ScreenShot
-![Screenshot_22](https://user-images.githubusercontent.com/30838114/59372624-20f18c80-8d72-11e9-8884-4cbeeaea69e8.png)
+![Screenshot_68](https://user-images.githubusercontent.com/30838114/61727910-59877b80-ad9e-11e9-9af5-a116a33d71c2.png)
+
 
 
 ## Download
