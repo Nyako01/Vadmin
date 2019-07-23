@@ -1,32 +1,30 @@
-# FivemServerManager
+# Vadmin
 This is a tool to easily manage server fivem
 
 ## Feature
-- Start/Stop Server
-- AutoRestart Server by schedule
-- Change SystemInfo
-- Console Command
-- Resource Manager (Enable/Disable/Rename, Install/Uninstall, Start/Stop/Restart Resource)
-- Restart Button (Manual Restart)
-- AUTO Restart if Server Crash or Force Close
-- Disable Close Program if Server Currently Running
-- Start Server Without start_server.bat (batch file)
-- PlayerList (include Kick Player)
-- Check For Update (Progam and Server)
-- OneSync Support
-- Kick All Player Button
-- Option to Clear Cache When Restart in Setting menu
-- Clear Cache Button (manual Clear Cache)
-- Custom Server Config
-- Server Mode (Public Server and Test Server)
-- Theme Option (Dark Theme available)
-- Execute Command Before Auto Restart
-- Kick All Player When Auto Restart
-- Tooltip(information if you pointing something)
-- Information About Version of Program and Server in Setting
-- Auto Check Version Program and Server every 5 Second
-
-
+* Start/Stop Server
+* AutoRestart Server by schedule
+* Change SystemInfo
+* Console Command
+* Resource Manager (Enable/Disable/Rename, Install/Uninstall, Start/Stop/Restart Resource)
+* Restart Button (Manual Restart)
+* AUTO Restart if Server Crash or Force Close
+* Disable Close Program if Server Currently Running
+* Start Server Without start_server.bat (batch file)
+* PlayerList (include Kick Player)
+* Check For Update (Progam and Server)
+* OneSync Support
+* Kick All Player Button
+* Option to Clear Cache When Restart in Setting menu
+* Clear Cache Button (manual Clear Cache)
+* Custom Server Config
+* Server Mode (Public Server and Test Server)
+* Theme Option (Dark Theme available)
+* Execute Command Before Auto Restart
+* Kick All Player When Auto Restart
+* Tooltip(information if you pointing something)
+* Information About Version of Program and Server in Setting
+* Auto Check Version Program and Server every 5 Second
 ## ScreenShot
 ![Screenshot_22](https://user-images.githubusercontent.com/30838114/59372624-20f18c80-8d72-11e9-8884-4cbeeaea69e8.png)
 
@@ -35,7 +33,7 @@ This is a tool to easily manage server fivem
 to download this tool. you can go to [Release](https://github.com/Oky12/FivemServerManager/releases) and download latest version
 
 **Requirement**
-- net. framework 4.0 or above
+- net. framework 4.5 or above
 
 
 **Installation**
