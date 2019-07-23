@@ -1,0 +1,17 @@
+C:\Users\okisu\Documents\Myproject\Fivem Server Manager\Debug\Vadmin.exe.config
+C:\Users\okisu\Documents\Myproject\Fivem Server Manager\Debug\Vadmin.exe
+C:\Users\okisu\Documents\Myproject\Fivem Server Manager\Debug\Vadmin.pdb
+C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Debug\Vadmin.csprojAssemblyReference.cache
+C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Debug\Fivem_Server_Manager.Form1.resources
+C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Debug\Fivem_Server_Manager.InstallResource.resources
+C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Debug\Fivem_Server_Manager.EditSchedule.resources
+C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Debug\Vadmin.Properties.Resources.resources
+C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Debug\Server_Manager_for_Fivem.RenameResource.resources
+C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Debug\Vadmin.csproj.GenerateResource.cache
+C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Debug\Vadmin.csproj.CoreCompileInputs.cache
+C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Debug\Vadmin.csproj.CopyComplete
+C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Debug\Vadmin.exe
+C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Debug\Vadmin.pdb
+E:\FiveMPrivateServer\server-data\Vadmin.exe.config
+E:\FiveMPrivateServer\server-data\Vadmin.exe
+E:\FiveMPrivateServer\server-data\Vadmin.pdb
