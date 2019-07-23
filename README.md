@@ -26,9 +26,7 @@ This is a tool to easily manage server fivem
 * Information About Version of Program and Server in Setting
 * Auto Check Version Program and Server every 5 Second
 ## ScreenShot
-![Screenshot_68](https://user-images.githubusercontent.com/30838114/61727910-59877b80-ad9e-11e9-9af5-a116a33d71c2.png)
-
-
+![Screenshot_67](https://user-images.githubusercontent.com/30838114/61728034-93f11880-ad9e-11e9-9578-388047d757ea.png)
 
 ## Download
 to download this tool. you can go to [Release](https://github.com/Oky12/FivemServerManager/releases) and download latest version
