@@ -1,24 +1,22 @@
-﻿using System;
+﻿using Microsoft.Owin.Hosting;
+using Newtonsoft.Json;
+using Owin;
+using Server_Manager_for_Fivem;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Windows.Forms;
 using System.Net;
-using System.Net.NetworkInformation;
 using System.Net.Http;
-using System.Net.Http.Headers;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Text;
-using System.Data;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Timers;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Server_Manager_for_Fivem;
+using System.Windows.Forms;
 using SystemPerformance;
-
+using Vadmin;
 
 namespace Fivem_Server_Manager
 {
@@ -32,25 +30,11 @@ namespace Fivem_Server_Manager
         string FileConfigApp = "Config.cfg";
         public static string LocationFivemServer = "";
         public static string Theme = "";
-        string ServerName = "";
-        string License = "";
-        string Tcp = "";
-        string Udp = "";
-        String MaxClient = "";
-        string IconFile = "";
-        String DatabaseServer = "";
-        string DatabaseName = "";
-        string DatabaseUser = "";
-        string DatabasePass = "";
-        string WebRip = "";
-        string NetAd = "";
+        string ServerName, License, Tcp, Udp, MaxClient, IconFile, DatabaseServer, DatabaseName, DatabaseUser, DatabasePass, WebRip, WebApi = "";
+        string[] cntxt, Pid, Pname, Pip, Pping;
 
         public string PlayerListData = "{0, -5}{1, -50}{2, -40}{3, 0}";
-        public string Id = "";
-        public string SteamId = "";
-        public string NamePlayer = "";
-        public string Ip = "";
-        public string PingPlayer = "";
+        public string Id, SteamId, NamePlayer, Ip, PingPlayer;
         int playerDetected1 = 0;
         int playerDetected2 = 0;
         int intervalCheckPlayer = 5;
@@ -86,6 +70,18 @@ namespace Fivem_Server_Manager
             return checknet.Status == IPStatus.Success;
         }
 
+        public static string GetLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            throw new Exception("No network adapters with an IPv4 address in the system!");
+        }
 
         public Form1()
         {
@@ -104,21 +100,16 @@ namespace Fivem_Server_Manager
             ResourceList.Columns.Add("Enable/Disable", 100);
             ResourceList.Columns.Add("Start/Stop", 100);
 
+            Console.WriteLine(WebApi.Length);
 
-            PerformanceCounterCategory category = new PerformanceCounterCategory("Network Interface");
-
-            String[] instancename = category.GetInstanceNames();
-
-            foreach (string name in instancename)
-            {
-                NetSelect.Items.Add(name);
-                Console.WriteLine(name);
-
-            }
-
+            WebApi = GetData(FileConfigApp, "WebApi", 9, false);
+            WebRip = GetData(FileConfigApp, "WebRemote", 11, false);
+            WebIP.Text = WebRip;
+            WebHost(WebRip);
 
             Tips();
             ReadConfig();
+            
             // WebIP.Text = "http://192.168.100.126:44811";
             //if (WebIP.TextLength > 10)
             //{
@@ -198,45 +189,92 @@ namespace Fivem_Server_Manager
             if (url.Length > 15)
             {
                 WebClient client = new WebClient();
-                string WebStat = client.DownloadString(url + "/api/Dashboard/1");
+                string WebStat1 = client.DownloadString(url + "/api/Dashboard/1");
+                string WebStat2 = client.DownloadString(url + "/api/Dashboard/2");
                 //Console.WriteLine(WebStat);
-                if (WebStat == "\"Start\"" && !isrunning && st == false)
+                int stat1 = WebStat1.IndexOf("Start");
+                int stat2 = WebStat2.IndexOf("Start");
+
+                if (stat1 > 0 /*&& stat2 == -1*/ && !isrunning && st == false)
                 {
                     Console.WriteLine("server started");
-                    st = true;
+                    //st = true;
                     Button1_Click_1(new object(), new EventArgs());
 
                 }
 
-                if (WebStat == "\"Stop\"" && isrunning && st == true)
+                if (stat1 == -1 /*&& stat2 > 0*/ && isrunning && st == true)
                 {
                     Console.WriteLine("server stop");
-                    st = false;
+                    //st = false;
                     Button1_Click_1(new object(), new EventArgs());
-        
+
                 }
 
             }
 
+            var ConsoleText = new
+            {
+                ID = 1,
+                ConsoleIN = cntxt
+            };
+            //Console.WriteLine(stat3);
+            string ConsoleText_Data = JsonConvert.SerializeObject(ConsoleText);
+            PostData(url + "/api/Console", ConsoleText_Data);
+
+            if (playerDetected1 > 0)
+            {
+                var Playerdata = new
+                {
+                    PlayerID = Pid,
+                    PlayerName = Pname,
+                    PlayerIP = Pip,
+                    PlayerPing = Pping
+                };
+                //Console.WriteLine(Playerdata + "\n");
+                string Player_data = JsonConvert.SerializeObject(Playerdata);
+                PostData(url + "/api/Player", Player_data);
+            }
+
+
+
+        }
+
+        void WebHost(string url)
+        {
+            try
+            {
+                //var url = "http://192.168.100.126:44811";
+                WebApp.Start(url, builder => builder.UseFileServer(enableDirectoryBrowsing: true));
+                
+
+                WebApp.Start<WebAPI>(url: WebApi);
+                Console.WriteLine("Server is up and running");
+
+                Console.WriteLine("Listening at " + url + " and " + WebApi);
+            }
+            catch (Exception w)
+            {
+                MessageBox.Show(w.ToString());
+            }
         }
 
         void Monitoring()
         {
-            if (WebRip.Length > 15)
+            if (WebApi.Length > 15)
             {
                 try
                 {
                     PerformanceCounter diskPerformanceCounter = new PerformanceCounter();
-                    PerformanceCounter networkPerformanceCounter = new PerformanceCounter();
+
 
                     diskPerformanceCounter.CategoryName = "PhysicalDisk";
                     diskPerformanceCounter.CounterName = "% Idle Time";
                     diskPerformanceCounter.InstanceName = "_Total";
 
                     //string a = "Realtek PCIe Gbe Family Controller";
-                    networkPerformanceCounter.CategoryName = "Network Interface";
-                    networkPerformanceCounter.CounterName = "Bytes Total/Sec";
-                    networkPerformanceCounter.InstanceName = NetAd;
+
+
 
 
 
@@ -246,7 +284,7 @@ namespace Fivem_Server_Manager
                     {
 
                         float currentDisk = diskPerformanceCounter.NextValue();
-                        float currentnetwork = networkPerformanceCounter.NextValue();
+
                         currentDisk = 100 - currentDisk;
 
                         float cpu = thisDevice.Current_CPU_Usage; //returns a floating number denoting CPU usage of the device on which the assembly is being executed
@@ -255,8 +293,8 @@ namespace Fivem_Server_Manager
                         int CpuPercent = (int)cpu;
                         int RamPercent = (int)ram;
                         int DiskPercent = (int)currentDisk;
-                        int NetPercent = (int)currentnetwork;
-                        NetPercent = NetPercent / 1000;
+
+
 
                         // Console.WriteLine(CpuPercent + "%  " + RamPercent + "%  " + DiskPercent + "%  " + NetPercent + "kb/s");
 
@@ -266,11 +304,11 @@ namespace Fivem_Server_Manager
                             CPU = CpuPercent.ToString(),
                             RAM = RamPercent.ToString(),
                             DISK = DiskPercent.ToString(),
-                            NET = NetPercent.ToString()
+
                         };
 
                         string stat3_data = JsonConvert.SerializeObject(stat3);
-                        PostData(WebRip + "/api/Dashboard", stat3_data);
+                        PostData(WebApi + "/api/Dashboard", stat3_data);
 
                         Thread.Sleep(1000);
                     }
@@ -311,7 +349,7 @@ namespace Fivem_Server_Manager
                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (result == DialogResult.Yes)
                 {
-                    if (WebRip.Length > 15)
+                    if (WebApi.Length > 15)
                     {
                         var stat3 = new
                         {
@@ -323,7 +361,7 @@ namespace Fivem_Server_Manager
                         };
 
                         string stat3_data = JsonConvert.SerializeObject(stat3);
-                        PostData(WebRip + "/api/Dashboard", stat3_data);
+                        PostData(WebApi + "/api/Dashboard", stat3_data);
                     }
                     if (IsProcessOpen("FXServer"))
                     {
@@ -358,7 +396,7 @@ namespace Fivem_Server_Manager
                 {
                     //WriteToFileThreadSafe(">Checking Version", "Debug.txt");
 
-                    string s = client.DownloadString("https://raw.githubusercontent.com/Oky12/ServerManagerForFivem/master/Version");
+                    string s = client.DownloadString("https://raw.githubusercontent.com/Oky12/Vadmin/master/Version");
                     // Console.WriteLine(s);
                     NewProgram = s;
                     int a = s.IndexOf(appversion);
@@ -382,7 +420,7 @@ namespace Fivem_Server_Manager
                             //ShowMessage = false;
                             WriteToFileThreadSafe(">Open Browser to Download Page" + a, "Debug.txt");
 
-                            Process.Start("https://github.com/Oky12/FivemServerManager/releases");
+                            Process.Start("https://github.com/Oky12/Vadmin/releases");
                             //StopProc("Fivem Server Manager");
                         }
                         else
@@ -432,7 +470,8 @@ namespace Fivem_Server_Manager
         {
             string[] Row = { id, name, ip, ping };
             ListViewItem item = new ListViewItem(Row);
-            PlayerList.Items.Add(item);
+            PlayerList.BeginInvoke(new MethodInvoker(() => PlayerList.Items.Add(item)));
+
         }
 
         void addRowResourceList(string ResourceName, string Category, string OnOff, string StartStop)
@@ -658,26 +697,20 @@ namespace Fivem_Server_Manager
                 SchMinute3 = GetData(FileConfigApp, "Schedule3_M", 14, false);
                 ExcCmdMnt3 = GetData(FileConfigApp, "ExcCommMnt3", 14, false);
                 ExcCmd3 = GetData(FileConfigApp, "EscCmd3", 10, false);
-
-                WebRip = GetData(FileConfigApp, "WebRemoteIP", 13, false);
-                WebIP.Text = WebRip;
-
-                NetAd = GetData(FileConfigApp, "NetAdapter", 13, false);
-
-                NetSelect.Text = NetAd;
+                
 
                 string SM = GetData(FileConfigApp, "ServerMode", 13, false);
                 Console.WriteLine(SM);
                 if (SM == "0")
                 {
-                    //ServerMode.Text = "Public Server";
+                    ServerMode.Text = "Public Server";
                     SelectFileConfigServer = FileConfigServer1;
                     Servermode = 0;
                     //SaveConfigProgram();
                 }
                 if (SM == "1")
                 {
-                    //ServerMode.Text = "Test Server";
+                    ServerMode.Text = "Test Server";
                     SelectFileConfigServer = FileConfigServer2;
                     Servermode = 1;
                     //SaveConfigProgram();
@@ -901,7 +934,10 @@ namespace Fivem_Server_Manager
                         Server_Name.Text = ServerName;
                     }
 
-                    sendData(WebRip);
+                    if (WebApi.Length > 15)
+                    {
+                        sendData(WebApi);
+                    }
                 }
                 else
                 {
@@ -913,9 +949,15 @@ namespace Fivem_Server_Manager
             }
         }
         Process proc = new Process();
+        public static List<string> consoleText = new List<string>();
+        public static List<string> Playerid = new List<string>();
+        public static List<string> Playername = new List<string>();
+        public static List<string> Playerip = new List<string>();
+        public static List<string> Playerping = new List<string>();
 
         void start()
         {
+
             WriteToFileThreadSafe(">Starting Server With OneSync OFF", "Debug.txt");
             File.Delete("LOG.txt");
             proc.StartInfo.FileName = LocationFivemServer + "\\run.cmd";
@@ -955,23 +997,36 @@ namespace Fivem_Server_Manager
                     PrintPlayerList(line);
                     Thread.Sleep(10);
                     addRowPlayerList(Id, NamePlayer, Ip, PingPlayer + "ms");
+                    Playerid.Add(Id);
+                    Playername.Add(NamePlayer);
+                    Playerip.Add(Ip);
+                    Playerping.Add(PingPlayer + "ms");
+                    Pid = Playerid.ToArray();
+                    Pname = Playername.ToArray();
+                    Pip = Playerip.ToArray();
+                    Pping = Playerping.ToArray();
                     playerDetected1++;
 
                 }
                 else
                 {
 
+
                     WriteToFileThreadSafe("[" + Hour + ":" + Minute + ":" + Second + "]: " + line, "LOG.txt");
                     SetText(line);
+
+                    consoleText.Add(line);
+                    cntxt = consoleText.ToArray();
                     int a = line.IndexOf("server thread hitch");
                     //Console.WriteLine(a);
                     if (a != -1 && isrunning)
                     {
 
                         ServerStarted = true;
-                        sendData(WebIP.Text);
-                        if (WebRip.Length > 15)
+                        
+                        if (WebApi.Length > 15)
                         {
+                            sendData(WebApi);
                             var stat1 = new
                             {
                                 ID = 1,
@@ -979,7 +1034,7 @@ namespace Fivem_Server_Manager
                             };
 
                             string stat1_data = JsonConvert.SerializeObject(stat1);
-                            PostData(WebRip + "/api/Dashboard", stat1_data);
+                            PostData(WebApi + "/api/Dashboard", stat1_data);
 
                             var stat2 = new
                             {
@@ -988,7 +1043,7 @@ namespace Fivem_Server_Manager
                             };
 
                             string stat2_data = JsonConvert.SerializeObject(stat2);
-                            PostData(WebRip + "/api/Dashboard", stat2_data);
+                            PostData(WebApi + "/api/Dashboard", stat2_data);
                             //CheckProcess();
                         }
                     }
@@ -1102,8 +1157,10 @@ namespace Fivem_Server_Manager
                 "Schedule3_M = " + SchMinute3,
                 "ExcCommMnt3 = " + ExcCmdMnt3,
                 "EscCmd3 = " + ExcCmd3,
-                "WebRemoteIP =" + WebRip,
-                "NetAdapter = " + NetAd};
+                "WebRemote =" + WebRip,
+                "WebApi = " + WebApi
+            };
+
             foreach (string ls in list)
             {
                 Console.WriteLine(ls);
@@ -1220,12 +1277,52 @@ namespace Fivem_Server_Manager
                 OverWrite(SelectFileConfigServer, "set mysql_connection_string", RawDataDb);
 
                 string NewWebIP = WebIP.Text;
-                string RawDataWebIP = "WebRemoteIP =" + NewWebIP;
-                OverWrite(FileConfigApp, "WebRemoteIP", RawDataWebIP);
+                string RawDataWebIP = "WebRemote =" + NewWebIP;
+                OverWrite(FileConfigApp, "WebRemote", RawDataWebIP);
+                Console.WriteLine(NewWebIP);
+                int portPos = NewWebIP.LastIndexOf(":");
+                Console.WriteLine(portPos);
+                string port = NewWebIP.Substring(portPos + 1, (NewWebIP.Length - portPos) - 2);
+                Console.WriteLine(port);
+                int P = Int32.Parse(port);
+                Console.WriteLine(P);
+                string iplink = NewWebIP.Substring(0, (NewWebIP.Length - port.Length) - 1);
+                Console.WriteLine(iplink);
+                int newport = P + 1;
+                Console.WriteLine(newport);
+                string WebApiLink = iplink + newport.ToString() + "/";
+                Console.WriteLine(WebApiLink);
 
-                ReadConfig();
-                MessageBox.Show("Configuration Saved", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                string RawDataWebApi = "WebApi = " + WebApiLink;
+                OverWrite(FileConfigApp, "WebApi", RawDataWebApi);
+             
 
+                if (WebRip != NewWebIP)
+                {
+                    MessageBox.Show("Web Remote Link has been Change. The program will be Restart", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    string bat = "RegHTTP.bat";
+                    string oldlink1 = "netsh http delete urlacl url=" + WebRip;
+                    string oldlink2 = "netsh http delete urlacl url=" + WebApi;
+                    string newlink1 = "netsh http add urlacl url=" + NewWebIP + " user=Everyone";
+                    string newlink2 = "netsh http add urlacl url=" + WebApiLink + " user=Everyone";
+                    lineChanger(oldlink1, bat, 33);
+                    lineChanger(oldlink2, bat, 34);
+                    lineChanger(newlink1, bat, 35);
+                    lineChanger(newlink2, bat, 36);
+                    OverWrite("WebRemote/Scripts/Action.js", "var webAPI", "var webAPI = '" + WebApiLink + "';");
+                    Process batrun = new Process();
+                    batrun.StartInfo.FileName = @"cmd.exe";
+                    //batrun.StartInfo.Verb = "runas";
+                    batrun.StartInfo.Arguments = "/C" + bat;
+                    batrun.StartInfo.CreateNoWindow = false;
+                    batrun.Start();
+                }
+                else
+                {
+
+                    ReadConfig();
+                    MessageBox.Show("Configuration Saved", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
         }
 
@@ -1417,7 +1514,10 @@ namespace Fivem_Server_Manager
         }
         void Time(object source, ElapsedEventArgs e)
         {
-            WebStatus(WebRip);
+            if (WebApi.Length > 15)
+            {
+                WebStatus(WebApi);
+            }
             //for (int i = 0; i < 10; i++)
             //{
             try
@@ -1427,7 +1527,7 @@ namespace Fivem_Server_Manager
                 Minute = LocalTime.Minute.ToString();
                 Second = LocalTime.Second.ToString();
                 printTime(Hour + ":" + Minute + ":" + Second);
-                if (WebRip.Length > 15)
+                if (WebApi.Length > 15)
                 {
                     var stat2 = new
                     {
@@ -1436,7 +1536,7 @@ namespace Fivem_Server_Manager
                     };
 
                     string stat2_data = JsonConvert.SerializeObject(stat2);
-                    PostData(WebRip + "/api/Dashboard", stat2_data);
+                    PostData(WebApi + "/api/Dashboard", stat2_data);
                 }
                 //WebClient data = new WebClient();
                 //string json = data.DownloadString("http://192.168.100.126:44811//api/Dashboard");
@@ -1445,9 +1545,13 @@ namespace Fivem_Server_Manager
                 //Console.WriteLine(CheckStatusTime);
                 if (CheckStatusTime >= intervalCheckPlayer && isrunning && ServerStarted)
                 {
-                    Console.WriteLine("send status");
+                    Playerid.Clear();
+                    Playername.Clear();
+                    Playerip.Clear();
+                    Playerping.Clear();
+                    //Console.WriteLine("send status");
                     // WriteToFileThreadSafe("send status", "Debug.txt");
-                    PlayerList.Items.Clear();
+                    PlayerList.BeginInvoke(new MethodInvoker(() => PlayerList.Items.Clear()));
                     StreamWriter Send = proc.StandardInput;
                     Send.WriteLine("status");
                     CheckStatusTime = 0;
@@ -1486,14 +1590,25 @@ namespace Fivem_Server_Manager
 
             if (Start_StopMode == 1)
             {
+                if (WebApi.Length > 15)
+                {
+                    var stat1 = new
+                    {
+                        ID = 1,
+                        Status1 = "Start"
+                    };
+
+                    string stat1_data = JsonConvert.SerializeObject(stat1);
+                    PostData(WebApi + "/api/Dashboard", stat1_data);
+                }
                 Start.BeginInvoke(new MethodInvoker(() => Start.Text = "STOP"));
-                
+
                 StartServer = new Thread(start);
                 tabControl1.BeginInvoke(new MethodInvoker(() => tabControl1.SelectTab(tabPage2)));
-                
+
                 StartServer.Start();
                 textBox1.BeginInvoke(new MethodInvoker(() => textBox1.Text = ""));
-
+                st = true;
                 Thread.Sleep(2500);
                 //CheckProcess();
                 RSTART.BeginInvoke(new MethodInvoker(() => RSTART.Enabled = true));
@@ -1507,14 +1622,16 @@ namespace Fivem_Server_Manager
             if (Start_StopMode == 0)
             {
                 WriteToFileThreadSafe(">Server Stop", "Debug.txt");
-                PlayerList.Items.Clear();
+                PlayerList.BeginInvoke(new MethodInvoker(() => PlayerList.Items.Clear()));
+
                 //proc.CancelOutputRead();
                 Start.BeginInvoke(new MethodInvoker(() => Start.Text = "START"));
                 StopProc("FXServer");
                 //proc.Kill();
                 //StartServer.Abort();
+                st = false;
                 ServerStarted = false;
-                if (WebRip.Length > 15)
+                if (WebApi.Length > 15)
                 {
                     var stat1 = new
                     {
@@ -1523,7 +1640,7 @@ namespace Fivem_Server_Manager
                     };
 
                     string stat1_data = JsonConvert.SerializeObject(stat1);
-                    PostData(WebRip + "/api/Dashboard", stat1_data);
+                    PostData(WebApi + "/api/Dashboard", stat1_data);
 
                     var stat2 = new
                     {
@@ -1532,8 +1649,8 @@ namespace Fivem_Server_Manager
                     };
 
                     string stat2_data = JsonConvert.SerializeObject(stat2);
-                    PostData(WebRip + "/api/Dashboard", stat2_data);
-                    sendData(WebRip);
+                    PostData(WebApi + "/api/Dashboard", stat2_data);
+                    sendData(WebApi);
                 }
                 //ServerStoped = true;
                 Thread.Sleep(500);
@@ -1619,12 +1736,7 @@ namespace Fivem_Server_Manager
             progressBarForm.BeginInvoke(new MethodInvoker(() => progressBarForm.Close()));
         }
 
-        void getstatus(object sender, ElapsedEventArgs e)
-        {
-            WebClient readstatus = new WebClient();
-            string oi = readstatus.DownloadString("http://192.168.100.126:44518/");
-            //Console.WriteLine(oi);
-        }
+
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -2289,41 +2401,25 @@ namespace Fivem_Server_Manager
             }
         }
 
+        public string Get(string uri)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            using (Stream stream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
+            }
+        }
 
         private void LinkLabel1_LinkClicked_1(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            var stat1 = new
-            {
-                ID = 1,
-                Status1 = "Start"
-            };
-
-            string stat1_data = JsonConvert.SerializeObject(stat1);
-            //PostData("http://192.168.100.126:44811/api/Dashboard", json_data);
-            PostData("https://localhost:44397/api/Dashboard", stat1_data);
-
-            var stat2 = new
-            {
-                ID = 2,
-                Status2 = "START"
-            };
-
-            string stat2_data = JsonConvert.SerializeObject(stat2);
-            //PostData("http://192.168.100.126:44811/api/Dashboard", json_data);
-            PostData("https://localhost:44397/api/Dashboard", stat2_data);
-
+            
 
         }
 
-        private void NetSelect_SelectedValueChanged(object sender, EventArgs e)
-        {
-           var n = NetSelect.SelectedItem;
-            NetAd = n.ToString();
-            Console.WriteLine(n);
-            Console.WriteLine("save net select");
-            //SaveConfigProgram();
-        }
 
         private void DisableToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -2438,7 +2534,7 @@ namespace Fivem_Server_Manager
                 Console.WriteLine("Public Server");
                 SelectFileConfigServer = FileConfigServer1;
                 Servermode = 0;
-                
+
                 SaveConfigProgram();
                 ReadConfig();
                 if (isrunning)
@@ -2584,149 +2680,7 @@ namespace Fivem_Server_Manager
             }
         }
 
-        //public static void SimpleListenerExample(string[] prefixes)
-        //{
-        //    if (!HttpListener.IsSupported)
-        //    {
-        //        Console.WriteLine("Windows XP SP2 or Server 2003 is required to use the HttpListener class.");
-        //        return;
-        //    }
-        //    // URI prefixes are required,
-        //    // for example "http://contoso.com:8080/index/".
-        //    if (prefixes == null || prefixes.Length == 0)
-        //        throw new ArgumentException("prefixes");
 
-        //    // Create a listener.
-        //    HttpListener listener = new HttpListener();
-        //    // Add the prefixes.
-        //    foreach (string s in prefixes)
-        //    {
-        //        listener.Prefixes.Add(s);
-        //    }
-        //    listener.Start();
-
-        //    Console.WriteLine("Listening...");
-        //    // Note: The GetContext method blocks while waiting for a request. 
-        //    HttpListenerContext context = listener.GetContext();
-        //    HttpListenerRequest request = context.Request;
-        //    // Obtain a response object.
-        //    HttpListenerResponse response = context.Response;
-        //    // Construct a response.
-        //    string responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
-        //    byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
-        //    // Get a response stream and write the response to it.
-        //    response.ContentLength64 = buffer.Length;
-        //    System.IO.Stream output = response.OutputStream;
-        //    output.Write(buffer, 0, buffer.Length);
-        //    // You must close the output stream.
-        //    //output.Close();
-        //    //listener.Stop();
-        //}
-
-        private void CreateLListener()
-        {
-            string prefixes = "http://192.168.100.126:33214/";
-            if (!HttpListener.IsSupported)
-            {
-                Console.WriteLine("Windows XP SP2 or Server 2003 is required to use the HttpListener class.");
-                return;
-            }
-            // URI prefixes are required,
-            // for example "http://contoso.com:8080/index/".
-            if (prefixes == null || prefixes.Length == 0)
-                throw new ArgumentException("prefixes");
-
-            // Create a listener.
-            HttpListener listener = new HttpListener();
-            // Add the prefixes.
-
-            listener.Prefixes.Add(prefixes);
-
-            listener.Start();
-
-            Console.WriteLine("Listening...");
-
-            while (true)
-            {
-                ThreadPool.QueueUserWorkItem(Processa, listener.GetContext());
-            }
-        }
-        void Processa(object o)
-        {
-            var context = o as HttpListenerContext;
-            // process request and make response
-
-            HttpListenerRequest request = context.Request;
-            // Obtain a response object.
-            HttpListenerResponse response = context.Response;
-            // Construct a response.
-            string responseString = "<HTML><BODY>Request Not Found</BODY></HTML>";
-
-            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
-            // Get a response stream and write the response to it.
-            response.ContentLength64 = buffer.Length;
-            System.IO.Stream output = response.OutputStream;
-            output.Write(buffer, 0, buffer.Length);
-
-        }
-
-
-
-        void streamHtml()
-        {
-            HttpListener server = new HttpListener();  // this is the http server
-            server.Prefixes.Add("http://127.0.0.1:33214/");  //we set a listening address here (localhost)
-            //server.Prefixes.Add("http://localhost/");
-
-            server.Start();   // and start the server
-            Console.WriteLine("Web Start");
-            while (true)
-            {
-                HttpListenerContext context = server.GetContext();
-                //context: provides access to httplistener's response
-
-                HttpListenerResponse response = context.Response;
-                //the response tells the server where to send the datas
-                string requestHttp = context.Request.Url.LocalPath;
-                Console.WriteLine(requestHttp);
-                //int ExceptionFile = requestHttp.IndexOf("/info.json");
-                //Console.WriteLine(ExceptionFile);
-                //if (ExceptionFile == -1)
-                //{
-                Console.WriteLine("exception file not request");
-                string page = Directory.GetCurrentDirectory() + requestHttp;
-                //this will get the page requested by the browser 
-                Console.WriteLine("Request Directory" + page);
-
-                if (!File.Exists(page))
-                {
-                    Console.WriteLine("File Request Not Found");
-                    string responseString = "<HTML><BODY>Request Not Found</BODY></HTML>";
-
-                    byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
-                    // Get a response stream and write the response to it.
-                    response.ContentLength64 = buffer.Length;
-                    System.IO.Stream output = response.OutputStream;
-                    output.Write(buffer, 0, buffer.Length);
-                }
-                else
-                {
-                    Console.WriteLine("File Request Found");
-
-                    TextReader tr = new StreamReader(page);
-                    string msg = tr.ReadToEnd();  //getting the page's content
-
-                    byte[] buffer = Encoding.UTF8.GetBytes(msg);
-                    //then we transform it into a byte array
-
-                    response.ContentLength64 = buffer.Length;  // set up the messasge's length
-                    Stream st = response.OutputStream;  // here we create a stream to send the message
-                    st.Write(buffer, 0, buffer.Length); // and this will send all the content to the browser
-
-                    //context.Response.Close();  // here we close the connection
-                }
-            }
-        }
     }
 
 }

@@ -1,6 +1,9 @@
 C:\Users\okisu\Documents\Myproject\Fivem Server Manager\Release\Vadmin.exe.config
+C:\Users\okisu\Documents\Myproject\Fivem Server Manager\Release\Vadmin.exe.manifest
+C:\Users\okisu\Documents\Myproject\Fivem Server Manager\Release\Vadmin.application
 C:\Users\okisu\Documents\Myproject\Fivem Server Manager\Release\Vadmin.exe
 C:\Users\okisu\Documents\Myproject\Fivem Server Manager\Release\Vadmin.pdb
+C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Release\Vadmin.csprojAssemblyReference.cache
 C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Release\Fivem_Server_Manager.Form1.resources
 C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Release\Fivem_Server_Manager.InstallResource.resources
 C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Release\Fivem_Server_Manager.EditSchedule.resources
@@ -8,7 +11,9 @@ C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Release\Vadmin.Properties.Resources.r
 C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Release\Server_Manager_for_Fivem.RenameResource.resources
 C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Release\Vadmin.csproj.GenerateResource.cache
 C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Release\Vadmin.csproj.CoreCompileInputs.cache
+C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Release\Vadmin.TrustInfo.xml
+C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Release\Vadmin.exe.manifest
+C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Release\Vadmin.application
 C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Release\Vadmin.csproj.CopyComplete
 C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Release\Vadmin.exe
 C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Release\Vadmin.pdb
-C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Release\Vadmin.csprojAssemblyReference.cache

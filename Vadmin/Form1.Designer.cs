@@ -94,7 +94,6 @@
             this.SearchText = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.NetSelect = new System.Windows.Forms.ComboBox();
             this.ShowNotifyUp = new System.Windows.Forms.CheckBox();
             this.UpdateServ = new System.Windows.Forms.Button();
             this.UpdateSoft = new System.Windows.Forms.Button();
@@ -591,7 +590,6 @@
             // 
             resources.ApplyResources(this.tabPage5, "tabPage5");
             this.tabPage5.BackColor = System.Drawing.Color.Transparent;
-            this.tabPage5.Controls.Add(this.NetSelect);
             this.tabPage5.Controls.Add(this.ShowNotifyUp);
             this.tabPage5.Controls.Add(this.UpdateServ);
             this.tabPage5.Controls.Add(this.UpdateSoft);
@@ -640,13 +638,6 @@
             this.tabPage5.Controls.Add(this.BoxPathServer);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.UseVisualStyleBackColor = true;
-            // 
-            // NetSelect
-            // 
-            this.NetSelect.FormattingEnabled = true;
-            resources.ApplyResources(this.NetSelect, "NetSelect");
-            this.NetSelect.Name = "NetSelect";
-            this.NetSelect.SelectedValueChanged += new System.EventHandler(this.NetSelect_SelectedValueChanged);
             // 
             // ShowNotifyUp
             // 
@@ -1037,7 +1028,6 @@
         private System.Windows.Forms.Button CN;
         private System.Windows.Forms.Button ClearCache;
         private System.Windows.Forms.CheckBox optClearCache;
-        private System.Windows.Forms.ListView PlayerList;
         private System.Windows.Forms.CheckBox OSyc;
         private System.Windows.Forms.Button Kall;
         private System.Windows.Forms.Label label27;
@@ -1091,7 +1081,7 @@
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.TextBox WebIP;
         private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.ComboBox NetSelect;
+        public System.Windows.Forms.ListView PlayerList;
     }
 }
 
