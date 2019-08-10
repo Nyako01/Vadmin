@@ -1,4 +1,5 @@
 ﻿using Microsoft.Owin.Hosting;
+using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Owin;
 using Server_Manager_for_Fivem;
@@ -31,7 +32,7 @@ namespace Fivem_Server_Manager
         public static string LocationFivemServer = "";
         public static string Theme = "";
         string ServerName, License, Tcp, Udp, MaxClient, IconFile, DatabaseServer, DatabaseName, DatabaseUser, DatabasePass, WebRip, WebApi = "";
-        string[] cntxt, Pid, Pname, Pip, Pping;
+        string[] cntxt, Pid, Pname, Pip, Pping, Pbname, Pbsteam, Pbexp, Pbpermanent, Pbreason;
 
         public string PlayerListData = "{0, -5}{1, -50}{2, -40}{3, 0}";
         public string Id, SteamId, NamePlayer, Ip, PingPlayer;
@@ -105,11 +106,14 @@ namespace Fivem_Server_Manager
             WebApi = GetData(FileConfigApp, "WebApi", 9, false);
             WebRip = GetData(FileConfigApp, "WebRemote", 11, false);
             WebIP.Text = WebRip;
-            WebHost(WebRip);
 
+            if (WebRip.Length > 15)
+            {
+                WebHost(WebRip);
+            }
             Tips();
             ReadConfig();
-            
+            ReadBanlistDB();
             // WebIP.Text = "http://192.168.100.126:44811";
             //if (WebIP.TextLength > 10)
             //{
@@ -226,6 +230,7 @@ namespace Fivem_Server_Manager
             {
                 var Playerdata = new
                 {
+                    ID = 2,
                     PlayerID = Pid,
                     PlayerName = Pname,
                     PlayerIP = Pip,
@@ -236,8 +241,283 @@ namespace Fivem_Server_Manager
                 PostData(url + "/api/Player", Player_data);
             }
 
+        }
+
+        string InputConsoleWeb;
+        void WebData()
+        {
+
+            WebClient client = new WebClient();
+
+            string ConsoleWeb = client.DownloadString(WebApi + "api/Console/1");
+            //Console.WriteLine(ConsoleWeb);
+            if (ConsoleWeb.Length > 3 && ConsoleWeb != "null")
+            {
+                Console.WriteLine("Get data");
+                int a = ConsoleWeb.LastIndexOf("\"");
+                Console.WriteLine(a);
+                InputConsoleWeb = ConsoleWeb.Substring(1, a - 1);
+                Console.WriteLine("saved " + InputConsoleWeb);
+                var ConsoleText = new
+                {
+                    ID = 2,
+                    ConsoleOUT = ""
+                };
+                //Console.WriteLine(stat3);
+                string ConsoleText_Data = JsonConvert.SerializeObject(ConsoleText);
+                PostData(WebApi + "/api/Console", ConsoleText_Data);
+                Console.WriteLine("Source data Cleared");
+
+                if (ServerStarted && InputConsoleWeb.Length > 3)
+                {
+                    StreamWriter Send = proc.StandardInput;
+                    Send.WriteLine(InputConsoleWeb);
+
+                    InputConsoleWeb = "";
+                }
+            }
+
+            string PlayerManager = client.DownloadString(WebApi + "api/Player/");
+            //Console.WriteLine(PlayerManager);
+
+            if (PlayerManager.Length > 4 && PlayerManager != "null")
+            {
+                Console.WriteLine("Get data");
+                int a = PlayerManager.LastIndexOf("\"");
+                Console.WriteLine(a);
+                string action = PlayerManager.Substring(1, a - 1);
+                Console.WriteLine(action);
+
+                var Paction = new
+                {
+                    ID = 1,
+                    PlayerAction = ""
+                };
+                //Console.WriteLine(stat3);
+                string Paction_Data = JsonConvert.SerializeObject(Paction);
+                PostData(WebApi + "/api/Player", Paction_Data);
+                Console.WriteLine("Source data Cleared");
+
+                if (action == "Kick all")
+                {
+                    kickAllPlayer();
+                }
 
 
+                int UnBanAction = action.IndexOf("UB");
+                if (UnBanAction != -1)
+                {
+                    int indexname = action.IndexOf("PlayerName");
+                    Console.WriteLine(indexname);
+                    Console.WriteLine(action.Length);
+                    int lenghtname = action.Length - (indexname + 11);
+                    Console.WriteLine(lenghtname);
+                    string BanPlayerName = action.Substring(indexname + 11, lenghtname);
+                    Console.WriteLine(BanPlayerName);
+                    DeleteDB("user_banlist", "Name", BanPlayerName);
+                    ReadBanlistDB();
+                }
+
+                int BanAction = action.IndexOf("Ban");
+               
+                if (BanAction != -1)
+                {
+                    //Console.WriteLine(action);
+                    int indexname = action.IndexOf("PlayerName");
+                    Console.WriteLine(indexname);
+                    int indexreason = action.IndexOf("Reason");
+                    Console.WriteLine(indexreason);
+                    int indexexp = action.IndexOf("Exp");
+                    Console.WriteLine(indexexp);
+                    int lenghtname = (indexreason - 1) - (indexname + 11);
+                    int lenghtreason = (action.Length - (indexreason + 7));
+
+                    string BanPlayerName = action.Substring(indexname + 11, lenghtname);
+                    string BanReason = action.Substring(indexreason + 7, lenghtreason);
+
+
+                    Console.WriteLine(BanPlayerName);
+                    Console.WriteLine(BanReason);
+
+                    string Sid = ReadDB("users", "name", BanPlayerName, "identifier");
+                    Console.WriteLine(Sid);
+                    string banlistcolumn = "Name, SteamID, ExpiredDate, Permanent, Reason, Banned";
+                    string banlistcolumnValue = "'" + BanPlayerName + "','" + Sid + "','Permanent','1','" + BanReason + "','1'";
+                    InsertDB("user_banlist", banlistcolumn, banlistcolumnValue);
+                    foreach (string h in Pname)
+                    {
+                        Console.WriteLine(h + ",");
+                    }
+                    Console.WriteLine(BanPlayerName + ",");
+                    int i = Array.IndexOf(Pname, BanPlayerName + " ");
+                    Console.WriteLine(i);
+                    string idplayer = Pid[i];
+                    Console.WriteLine(idplayer);
+                    if (ServerStarted && i > -1)
+                    {
+                        StreamWriter Send = proc.StandardInput;
+                        Send.WriteLine("clientkick " + idplayer + " You has been Banned Permanently because " + BanReason + "." +
+                            " Contact Administrators to request Unban");
+                    }
+                    ReadBanlistDB();
+                }
+                
+            }
+
+        }
+
+        public static List<string> Playerbanname = new List<string>();
+        public static List<string> Playerbansteamid = new List<string>();
+        public static List<string> Playerbanexp = new List<string>();
+        public static List<string> Playerbanpermanent = new List<string>();
+        public static List<string> Playerbanreason = new List<string>();
+
+        void ReadBanlistDB()
+        {
+            MySqlConnection db = new MySqlConnection();
+
+            string DBdata = "SERVER=" + DatabaseServer + ";" + "DATABASE=" +
+            DatabaseName + ";" + "UID=" + DatabaseUser + ";" + "PASSWORD=" + DatabasePass + ";";
+            Console.WriteLine(DBdata);
+            db.ConnectionString = DBdata;
+            try
+            {
+
+                db.Open();
+                MySqlCommand command = new MySqlCommand("SELECT * FROM user_banlist", db);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    Playerbanname.Clear();
+                    Playerbansteamid.Clear();
+                    Playerbanexp.Clear();
+                    Playerbanpermanent.Clear();
+                    Playerbanreason.Clear();
+
+                    while (reader.Read())
+                    {
+                        // access your record colums by using reader
+                        Console.WriteLine(reader["Name"]);
+                        Console.WriteLine(reader["SteamID"]);
+                        Console.WriteLine(reader["ExpiredDate"]);
+                        Console.WriteLine(reader["Permanent"]);
+                        Console.WriteLine(reader["Reason"]);
+                        Playerbanname.Add(reader["Name"].ToString());
+                        Playerbansteamid.Add(reader["SteamID"].ToString());
+                        Playerbanexp.Add(reader["ExpiredDate"].ToString());
+                        Playerbanpermanent.Add(reader["Permanent"].ToString());
+                        Playerbanreason.Add(reader["Reason"].ToString());
+                    }
+                    Console.WriteLine("finish Reading");
+                    Pbname = Playerbanname.ToArray();
+                    Pbsteam = Playerbansteamid.ToArray();
+                    Pbexp = Playerbanexp.ToArray();
+                    Pbpermanent = Playerbanpermanent.ToArray();
+                    Pbreason = Playerbanreason.ToArray();
+
+                    if (WebApi.Length > 15)
+                    {
+                        var Playerdata = new
+                        {
+                            ID = 3,
+                            BanPlayerName = Pbname,
+                            BanPlayerExp = Pbexp,
+                            BanPlayerReason = Pbreason
+                        };
+                        //Console.WriteLine(Playerdata + "\n");
+                        string Player_data = JsonConvert.SerializeObject(Playerdata);
+                        PostData(WebApi + "/api/Player", Player_data);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            finally
+            {
+                db.Close();
+            }
+        }
+
+        string ReadDB(string location, string find, string findvalue, string selectData)
+        {
+            MySqlConnection db = new MySqlConnection();
+            string re = "";
+            string DBdata = "SERVER=" + DatabaseServer + ";" + "DATABASE=" +
+            DatabaseName + ";" + "UID=" + DatabaseUser + ";" + "PASSWORD=" + DatabasePass + ";";
+            db.ConnectionString = DBdata;
+            try
+            {
+                db.Open();
+                MySqlCommand command = new MySqlCommand("SELECT * FROM " + location + " WHERE " + find + "='" + findvalue + "';", db);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    reader.Read();
+                    var getdata = reader[selectData];
+                    re = getdata.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            return re;
+        }
+
+        void InsertDB(string Location, string Column, string ColumnValue)
+        {
+            MySqlConnection db = new MySqlConnection();
+
+            string DBdata = "SERVER=" + DatabaseServer + ";" + "DATABASE=" +
+            DatabaseName + ";" + "UID=" + DatabaseUser + ";" + "PASSWORD=" + DatabasePass + ";";
+            db.ConnectionString = DBdata;
+            try
+            {
+                db.Open();
+                string Query = "INSERT INTO " + Location + "(" + Column + ") values(" + ColumnValue + ");";
+
+                MySqlCommand command = new MySqlCommand(Query, db);
+                MySqlDataReader reader;
+                reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+
+                }
+                Console.WriteLine("Data saved");
+                db.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+
+        void DeleteDB(string location, string find, string findvalue)
+        {
+            MySqlConnection db = new MySqlConnection();
+
+            string DBdata = "SERVER=" + DatabaseServer + ";" + "DATABASE=" +
+            DatabaseName + ";" + "UID=" + DatabaseUser + ";" + "PASSWORD=" + DatabasePass + ";";
+            db.ConnectionString = DBdata;
+            try
+            {
+                db.Open();
+                string Query = "DELETE FROM " + location + " WHERE " + find + "='" + findvalue + "';";
+
+                MySqlCommand command = new MySqlCommand(Query, db);
+                MySqlDataReader reader;
+                reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+
+                }
+                Console.WriteLine("Data Deleted");
+                db.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
 
         void WebHost(string url)
@@ -246,7 +526,7 @@ namespace Fivem_Server_Manager
             {
                 //var url = "http://192.168.100.126:44811";
                 WebApp.Start(url, builder => builder.UseFileServer(enableDirectoryBrowsing: true));
-                
+
 
                 WebApp.Start<WebAPI>(url: WebApi);
                 Console.WriteLine("Server is up and running");
@@ -493,12 +773,8 @@ namespace Fivem_Server_Manager
                 StatusText("STARTED");
                 //button1.Enabled = false;
                 //BrowserFolder.Enabled = false;
-                contextMenuStrip1.Items[0].Enabled = false;
-                contextMenuStrip1.Items[1].Enabled = false;
-                contextMenuStrip1.Items[2].Enabled = true;
-                contextMenuStrip1.Items[3].Enabled = true;
-                contextMenuStrip1.Items[4].Enabled = true;
-                contextMenuStrip2.Items[0].Enabled = true;
+                
+                
             }
             if (isrunning && !ServerStarted)
             {
@@ -510,12 +786,8 @@ namespace Fivem_Server_Manager
                 StatusText("STOP");
                 //button1.Enabled = true;
                 //BrowserFolder.Enabled = true;
-                contextMenuStrip1.Items[0].Enabled = true;
-                contextMenuStrip1.Items[1].Enabled = true;
-                contextMenuStrip1.Items[2].Enabled = false;
-                contextMenuStrip1.Items[3].Enabled = false;
-                contextMenuStrip1.Items[4].Enabled = false;
-                contextMenuStrip2.Items[0].Enabled = false;
+                
+                
             }
 
             if (!isrunning && ServerStarted)
@@ -697,7 +969,7 @@ namespace Fivem_Server_Manager
                 SchMinute3 = GetData(FileConfigApp, "Schedule3_M", 14, false);
                 ExcCmdMnt3 = GetData(FileConfigApp, "ExcCommMnt3", 14, false);
                 ExcCmd3 = GetData(FileConfigApp, "EscCmd3", 10, false);
-                
+
 
                 string SM = GetData(FileConfigApp, "ServerMode", 13, false);
                 Console.WriteLine(SM);
@@ -815,7 +1087,7 @@ namespace Fivem_Server_Manager
                         }
                         else
                         {
-                            DatabaseServer = "(Empty)";
+                           // DatabaseServer = "(Empty)";
                         }
                         if (SubLenghtDBN > 1)
                         {
@@ -825,7 +1097,7 @@ namespace Fivem_Server_Manager
                         else
                         {
 
-                            DatabaseName = "(Empty)";
+                            //DatabaseName = "(Empty)";
                         }
                         if (SubLenghtDBU > 1)
                         {
@@ -834,7 +1106,7 @@ namespace Fivem_Server_Manager
                         }
                         else
                         {
-                            DatabaseUser = "(Empty)";
+                            //DatabaseUser = "(Empty)";
                         }
                         if (SubLenghtDBP > 1)
                         {
@@ -849,7 +1121,7 @@ namespace Fivem_Server_Manager
                         }
                         else
                         {
-                            DatabasePass = "(Empty)";
+                            //DatabasePass = "(Empty)";
                         }
 
                         DbPass.Text = DatabasePass;
@@ -1023,7 +1295,7 @@ namespace Fivem_Server_Manager
                     {
 
                         ServerStarted = true;
-                        
+
                         if (WebApi.Length > 15)
                         {
                             sendData(WebApi);
@@ -1295,7 +1567,7 @@ namespace Fivem_Server_Manager
 
                 string RawDataWebApi = "WebApi = " + WebApiLink;
                 OverWrite(FileConfigApp, "WebApi", RawDataWebApi);
-             
+
 
                 if (WebRip != NewWebIP)
                 {
@@ -1514,10 +1786,7 @@ namespace Fivem_Server_Manager
         }
         void Time(object source, ElapsedEventArgs e)
         {
-            if (WebApi.Length > 15)
-            {
-                WebStatus(WebApi);
-            }
+
             //for (int i = 0; i < 10; i++)
             //{
             try
@@ -1529,6 +1798,9 @@ namespace Fivem_Server_Manager
                 printTime(Hour + ":" + Minute + ":" + Second);
                 if (WebApi.Length > 15)
                 {
+                    WebStatus(WebApi);
+                    WebData();
+
                     var stat2 = new
                     {
                         ID = 4,
@@ -1590,6 +1862,14 @@ namespace Fivem_Server_Manager
 
             if (Start_StopMode == 1)
             {
+                contextMenuStrip1.Items[0].Enabled = false;
+                contextMenuStrip1.Items[1].Enabled = false;
+                contextMenuStrip1.Items[2].Enabled = false;
+                contextMenuStrip1.Items[3].Enabled = true;
+                contextMenuStrip1.Items[4].Enabled = true;
+                contextMenuStrip1.Items[5].Enabled = true;
+                contextMenuStrip2.Items[0].Enabled = true;
+
                 if (WebApi.Length > 15)
                 {
                     var stat1 = new
@@ -1621,6 +1901,14 @@ namespace Fivem_Server_Manager
 
             if (Start_StopMode == 0)
             {
+                contextMenuStrip1.Items[0].Enabled = true;
+                contextMenuStrip1.Items[1].Enabled = true;
+                contextMenuStrip1.Items[2].Enabled = true;
+                contextMenuStrip1.Items[3].Enabled = false;
+                contextMenuStrip1.Items[4].Enabled = false;
+                contextMenuStrip1.Items[5].Enabled = false;
+                contextMenuStrip2.Items[0].Enabled = false;
+
                 WriteToFileThreadSafe(">Server Stop", "Debug.txt");
                 PlayerList.BeginInvoke(new MethodInvoker(() => PlayerList.Items.Clear()));
 
@@ -1704,6 +1992,37 @@ namespace Fivem_Server_Manager
         }
 
         public InstallResource progressBarForm = new InstallResource();
+
+        private void OpenFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+            string outESX = LocationFivemServer + "\\server-data\\resources\\";
+            string inESX = outESX + "\\[esx]\\";
+            if (CategoryResource == "OutESXFolder")
+            {
+               
+                if (Directory.Exists(outESX + SelectedResource))
+                {
+                    Process.Start(outESX + SelectedResource);
+                }
+                else
+                {
+                    MessageBox.Show("Resources " + SelectedResource + " Folder Not Found or Already Deleted", "Caution", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            if (CategoryResource == "InESXFolder")
+            {
+                
+                if (Directory.Exists(outESX + SelectedResource))
+                {
+                    Process.Start(inESX + SelectedResource);
+                }
+                else
+                {
+                    MessageBox.Show("Resources " + SelectedResource + " Folder Not Found or Already Deleted", "Caution", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+        }
 
         private void Button1_Click(object sender, EventArgs e)
         {
@@ -2335,17 +2654,6 @@ namespace Fivem_Server_Manager
 
 
 
-        private Dictionary<TabPage, Color> TabColors = new Dictionary<TabPage, Color>();
-        private void SetTabHeader(TabPage page, Color color)
-        {
-            TabColors[page] = color;
-            tabControl1.Invalidate();
-        }
-
-        private void Timer2_Tick(object sender, EventArgs e)
-        {
-
-        }
 
         private void EnableToolStripMenuItem1_Click(object sender, EventArgs e)
         {
@@ -2361,7 +2669,7 @@ namespace Fivem_Server_Manager
 
         private void UpdateSoft_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/Oky12/ServerManagerForFivem/releases/download/V" + NewProgram + "/Server_Manager_for_Fivem_" + NewProgram + ".zip");
+            Process.Start("https://github.com/Oky12/Vadmin/releases/download/V" + NewProgram + "/Vadmin" + NewProgram + ".zip");
         }
 
         private void ContextMenuStrip1_Opened(object sender, EventArgs e)
@@ -2443,21 +2751,11 @@ namespace Fivem_Server_Manager
         private void TabControl1_DrawItem(object sender, DrawItemEventArgs e)
         {
             //e.DrawBackground();
-            using (Brush br = new SolidBrush(TabColors[tabControl1.TabPages[e.Index]]))
-            {
-                e.Graphics.FillRectangle(br, e.Bounds);
-                SizeF sz = e.Graphics.MeasureString(tabControl1.TabPages[e.Index].Text, e.Font);
-                e.Graphics.DrawString(tabControl1.TabPages[e.Index].Text, e.Font, Brushes.Black, e.Bounds.Left + (e.Bounds.Width - sz.Width) / 2, e.Bounds.Top + (e.Bounds.Height - sz.Height) / 2 + 1);
 
-                Rectangle rect = e.Bounds;
-                rect.Offset(0, 1);
-                rect.Inflate(0, -1);
-                e.Graphics.DrawRectangle(Pens.DarkGray, rect);
-                e.DrawFocusRectangle();
-            }
         }
         void kickAllPlayer()
         {
+            Console.WriteLine("Kicking all player");
             playerDetected2 = PlayerList.Items.Count;
             if (playerDetected2 > 0)
             {

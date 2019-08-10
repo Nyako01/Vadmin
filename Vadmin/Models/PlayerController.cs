@@ -10,10 +10,13 @@ namespace Vadmin.Controllers
         public static string[] Playername = { "" };
         public static string[] Playerip = { "" };
         public static string[] Playerping = { "" };
-
-        public string[] GET()
+        public static string Playeraction = "";
+        public static string[] Playerbanname = { "" };
+        public static string[] Playerbanexp = { "" };
+        public static string[] Playerbanreason = { "" };
+        public string GET()
         {
-            return PlayerD;
+            return Playeraction;
         }
 
         public string[] Get(int id)
@@ -38,6 +41,19 @@ namespace Vadmin.Controllers
                     Rdata = new string[Playerping.Length];
                     Playerping.CopyTo(Rdata, 0);
                     break;
+                case 5:
+                    Rdata = new string[Playerbanname.Length];
+                    Playerbanname.CopyTo(Rdata, 0);
+                    break;
+                case 6:
+                    Rdata = new string[Playerbanexp.Length];
+                    Playerbanexp.CopyTo(Rdata, 0);
+                    break;
+                case 7:
+                    Rdata = new string[Playerbanreason.Length];
+                    Playerbanreason.CopyTo(Rdata, 0);
+                    break;
+
             }
 
 
@@ -46,10 +62,23 @@ namespace Vadmin.Controllers
 
         public void POST(Player pl)
         {
-            Playerid = pl.PlayerID;
-            Playername = pl.PlayerName;
-            Playerip = pl.PlayerIP;
-            Playerping = pl.PlayerPing;
+            switch (pl.ID)
+            {
+                case 1:
+                    Playeraction = pl.PlayerAction;
+                    break;
+                case 2:
+                    Playerid = pl.PlayerID;
+                    Playername = pl.PlayerName;
+                    Playerip = pl.PlayerIP;
+                    Playerping = pl.PlayerPing;
+                    break;
+                case 3:
+                    Playerbanname = pl.BanPlayerName;
+                    Playerbanexp = pl.BanPlayerExp;
+                    Playerbanreason = pl.BanPlayerReason;
+                    break;
+            }
         }
     }
 }

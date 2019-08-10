@@ -4,17 +4,17 @@
   <description asmv2:publisher="Vadmin" asmv2:product="Vadmin" xmlns="urn:schemas-microsoft-com:asm.v1" />
   <deployment install="true" mapFileExtensions="true" />
   <compatibleFrameworks xmlns="urn:schemas-microsoft-com:clickonce.v2">
-    <framework targetVersion="4.5" profile="Full" supportedRuntime="4.0.30319" />
+    <framework targetVersion="4.6" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="Vadmin.exe.manifest" size="17363">
+    <dependentAssembly dependencyType="install" codebase="Vadmin.exe.manifest" size="20063">
       <assemblyIdentity name="Vadmin.exe" version="1.0.0.0" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>BcWN39UwfskTGyvDOeiIF4xAAhOqfLlw44G66aVlpnk=</dsig:DigestValue>
+        <dsig:DigestValue>MX7plFRY1P3lbDWFWXSoqpVI11Q9BzGQw1l1LHu4LDI=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

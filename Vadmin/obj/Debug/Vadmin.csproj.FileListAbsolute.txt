@@ -6,6 +6,7 @@ E:\FiveMPrivateServer\server-data\Vadmin.exe.manifest
 E:\FiveMPrivateServer\server-data\Vadmin.application
 E:\FiveMPrivateServer\server-data\Vadmin.exe
 E:\FiveMPrivateServer\server-data\Vadmin.pdb
+C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Debug\Vadmin.csprojAssemblyReference.cache
 C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Debug\Fivem_Server_Manager.Form1.resources
 C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Debug\Fivem_Server_Manager.InstallResource.resources
 C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Debug\Fivem_Server_Manager.EditSchedule.resources
@@ -19,4 +20,3 @@ C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Debug\Vadmin.application
 C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Debug\Vadmin.csproj.CopyComplete
 C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Debug\Vadmin.exe
 C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Debug\Vadmin.pdb
-C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Debug\Vadmin.csprojAssemblyReference.cache

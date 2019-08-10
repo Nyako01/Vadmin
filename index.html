@@ -1,0 +1,167 @@
+﻿<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Vadmin</title>
+    <link href="WebRemote/Style/dashboard.css" rel="stylesheet" />
+    <link href="WebRemote/Style/playerManager.css" rel="stylesheet" />
+    <link rel="stylesheet" href="WebRemote/Style/console.css">
+    <link rel="shortcut icon" href="WebRemote/img/favicon.ico" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="WebRemote/Scripts/Action.js"></script>
+
+
+</head>
+
+<body>
+    <div class="header">
+        <div class="title">
+            <img src="WebRemote/img/logo.png" alt="logo">
+            <p>Vadmin</p>
+        </div>
+    </div>
+
+    <div class="sidenav">
+        <div id="Userlogin">
+            <div class="profile-userpic">
+                <img src="https://www.w3schools.com/howto/img_avatar.png" alt="">
+            </div>
+            <p class="Username">admin</p>
+            <p class="Userlevel">administrators</p>
+        </div>
+        <a class="dashboard" href="#"> Dashboard </a>
+        <a class="playerlist" href="#"> Player Manager </a>
+        <a class="console" href="#"> Console </a>
+    </div>
+
+    <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
+    <div class="main">
+
+        <div id="StatusPanel">
+
+            <div class="BoxName">
+                <div class="Layout">
+                    <div class="ServerName">Name</div>
+                    <div class="BT">
+                        <input class="StartBT Button" type="button" value="Start" />
+                        <input class="StopBT Button" type="button" value="Stop" />
+                    </div>
+                </div>
+            </div>
+            <div class="OnlinePlayer">
+                <p id="OnPlayer" class="TextPanel">Online Player</p>
+                <div class="TableON">
+
+                </div>
+            </div>
+            <div class="ContentDisplay">
+
+                <div class="BoxContent">
+                    <div id="ip" class="TextPanel">ip</div>
+                    <div id="status" class="TextPanel">Offline</div>
+                    <p id="Player" class="TextPanel">player</p>
+                    <p id="OneSync" class="TextPanel">Onesync</p>
+                    <p id="Map" class="TextPanel">map</p>
+                    <p id="ServerMode" class="TextPanel">Server Mode</p>
+                </div>
+
+            </div>
+            <div id="Monitoring">
+                <div class="BoxChart">
+                    <div class="CH1 Chart"></div>
+                    <div class="CH2 Chart"></div>
+                    <div class="CH3 Chart"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="PlayerList" style="display: none">
+            <div class="BoxPlayerlist">
+                <h1 class="ptitle1">Player List</h1>
+                <table id="PlayerTable">
+                    <tr>
+                        <th class="pid">ID</th>
+                        <th class="pname">Name</th>
+                        <th class="pip">IP</th>
+                        <th class="pping">Ping</th>
+                    </tr>
+                    <tbody class="Ptabledata">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="BoxBanPlayer">
+                <h1 class="ptitle1">Banned List</h1>
+                <table id="BanTable">
+                    <tr>
+
+                        <th class="bpname">Name</th>
+                        <th class="bptime">Duration Ban</th>
+                        <th class="bpreason">Reason</th>
+                    </tr>
+                    <tbody class="Btabledata">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="PlayerControll">
+                <div class="BoxPlayerPanel">
+                    <div>
+                        <p class="" style="margin: 0">Select Action</p>
+                        <select name="Select Action" class="ActionSelect">
+                               <option value="Kick">Kick</option>
+                               <option value="KickAll">Kick ALL</option>
+                              <option value="Ban Online">Ban</option>
+                              <!-- <option value="Ban Offline">Ban Offline</option> -->
+                              <option value="Unban">UnBan</option>
+                            </select>
+                    </div>
+                    <div class="Sid">
+                        <p class="SelectID" style="margin: 0">Select ID</p>
+                        <select class="IDSelect">
+                        
+                            </select>
+                    </div>
+                    <div class="Sname">
+                        <p class="SelectName" style="margin: 0">Select Name</p>
+                        <select class="PlayerSelect">
+                            <option value="test">test</option>
+                                </select>
+                    </div>
+                    <div class="Sbname">
+                        <p class="SelectName" style="margin: 0">Select Name</p>
+                        <select class="BanPlayerSelect">
+                            <option value="test">test</option>
+                                </select>
+                    </div>
+                    <div class="Rbox">
+                        <p class="" style="margin: 0">Reason</p>
+                        <input type="text" name="" id="Reason">
+                    </div>
+                    <div class="Bantime" style="display: none">
+                        <!-- <p class="" style="margin: 0">day for banning</p> -->
+                        <input type="checkbox" name="Permanent" id="PermanentCheck">Permanent
+                        <input type="date" data-date-format="DD MM YYYY" id="ExpireDate">
+
+                    </div>
+                    <input type="button" value="OK" class="ExecuteAction">
+                </div>
+            </div>
+        </div>
+
+        <div id="Console" style="display: none">
+            <div class="TextBox">
+                <p class="ConsoleText"></p>
+            </div>
+            <div class="InputBox">
+                <input type="text" name="input command" id="InputConsole">
+                <input class="SendConsole" type="button" value="SEND">
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

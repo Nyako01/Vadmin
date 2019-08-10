@@ -1,0 +1,336 @@
+/* Navbar */
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: rgb(219, 219, 219);
+}
+
+
+/* 
+.logo {
+    height: 50px;
+    top: 0px;
+    left: 0px;
+    position: relative;
+}
+
+.title {
+    top: -17px;
+    left: 0px;
+    font-family: verdana;
+    font-size: 20px;
+    color: white;
+    position: relative;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+header {
+    background: #7289D9;
+}
+
+header::after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+nav {
+    float: right;
+}
+
+nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+nav li {
+    display: inline-block;
+    margin-left: 70px;
+    padding-top: 18px;
+    position: relative;
+}
+
+nav a {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 15px;
+    font-family: verdana;
+    font-style: italic;
+}
+
+nav a:hover {
+    color: rgb(0, 0, 0);
+}
+
+nav a::before {
+    content: '';
+    display: block;
+    height: 5px;
+    width: 100%;
+    background-color: rgb(253, 253, 253);
+    position: absolute;
+    top: 0;
+    width: 0%;
+    transition: all ease-in-out 250ms;
+}
+
+nav a:hover::before {
+    width: 100%;
+} */
+
+.header {
+    /* height: 50px;
+    width: 100%;
+    top: 0;
+    background-color: white;
+    position: fixed; */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    z-index: 10;
+    background: white;
+    -webkit-box-shadow: 0 7px 8px rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 7px 8px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 7px 8px rgba(0, 0, 0, 0.12);
+}
+
+.header p {
+    top: 0px;
+    left: 35px;
+    position: fixed;
+    text-align: left;
+    font-size: 17px;
+    font-family: verdana;
+}
+
+.header img {
+    top: 8px;
+    left: 5px;
+    width: 35px;
+    position: fixed;
+}
+
+.sidenav {
+    height: 100%;
+    /* Full-height: remove this if you want "auto" height */
+    width: 200px;
+    /* Set the width of the sidebar */
+    position: fixed;
+    /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1;
+    /* Stay on top */
+    top: 50px;
+    /* Stay at the top */
+    left: 0;
+    background-color: rgb(255, 255, 255);
+    /* Black */
+    overflow-x: hidden;
+    /* Disable horizontal scroll */
+    padding-top: 20px;
+}
+
+
+/* The navigation menu links */
+
+.sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #000000;
+    display: block;
+    font-family: verdana;
+}
+
+
+/* When you mouse over the navigation links, change their color */
+
+.sidenav a:hover {
+    color: #f1f1f1;
+    background-color: rgb(0, 140, 255);
+}
+
+
+/* Style page content */
+
+.main {
+    top: 8%;
+    position: relative;
+    margin-left: 200px;
+    /* Same as the width of the sidebar */
+    padding: 0px 10px;
+}
+
+
+/* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
+
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+    .sidenav a {
+        font-size: 18px;
+    }
+}
+
+#Userlogin p {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-size: 17px;
+    color: #000000;
+    /* display: block; */
+    font-family: verdana;
+}
+
+.profile-userpic img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 50%;
+    height: 20%;
+}
+
+
+/* 
+.profile-userpic img {
+    float: none;
+    margin: 0 auto;
+    width: 50%;
+    height: 50%;
+    -webkit-border-radius: 50% !important;
+    -moz-border-radius: 50% !important;
+    border-radius: 50% !important;
+} */
+
+
+/* Content */
+
+
+/* 
+.BoxName {
+    width: 95%;
+    border: 1px solid rgb(255, 255, 255);
+    padding: 10px;
+    margin: 10px;
+    background-color: white;
+    font-family: Verdana;
+}
+
+
+
+.OnlinePlayer {
+    height: 400px;
+    width: 200px;
+    float: right;
+    left: 150px;
+    position: relative;
+    background-color: white;
+}
+
+.ContentDisplay {
+    width: 80%;
+    
+}
+*/
+
+.Layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 50px;
+    grid-gap: 10px;
+}
+
+.ServerName {
+    margin: 8px;
+    font-size: 15px;
+    font-family: verdana;
+}
+
+.BT {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.Button {
+    top: 0px;
+    margin: 10px;
+    width: 80px;
+    height: 40px;
+    float: right;
+    position: relative;
+}
+
+.BoxContent {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 100px 100px;
+    grid-gap: 10px;
+    margin: 10px;
+}
+
+.TextPanel {
+    text-align: center;
+    font-family: verdana;
+}
+
+#Monitoring {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 4;
+    grid-row-end: 6;
+    background-color: rgb(255, 255, 255);
+}
+
+.BoxChart {
+    display: flex;
+}
+
+.Chart {
+    flex: 1;
+}
+
+#StatusPanel {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 70px 100px 100px 100px 100px;
+    grid-gap: 10px;
+}
+
+.BoxName {
+    margin-top: 10px;
+    grid-row: 1;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    background-color: rgb(255, 255, 255);
+}
+
+.ContentDisplay {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 4;
+    background-color: rgb(255, 255, 255);
+}
+
+.OnlinePlayer {
+    grid-column: 3;
+    grid-row-start: 2;
+    grid-row-end: 6;
+    background-color: rgb(255, 255, 255);
+}
+
+.TableON p {
+    text-align: center;
+    font-family: verdana;
+    font-size: 13px;
+}

@@ -1,0 +1,86 @@
+#PlayerList {
+    margin: 20px;
+    display: grid;
+    grid-template-columns: 50% 1fr;
+    grid-template-rows: 500px 70px;
+    grid-gap: 10px;
+}
+
+.BoxPlayerList {
+    grid-column: 1;
+    grid-row: 1;
+    background-color: white;
+}
+
+.BoxBanPlayer {
+    grid-column: 2;
+    grid-row: 1;
+    background-color: white;
+}
+
+#PlayerTable {
+    margin-left: 10px;
+    margin-right: 10px;
+    max-width: 700px;
+    max-height: 500px;
+    overflow: auto;
+}
+
+tr {
+    text-align: left;
+    font-family: Verdana;
+    font-size: 13px;
+}
+
+.pname {
+    width: 200px;
+}
+
+.pip {
+    width: 200px;
+}
+
+.pping {
+    width: 100px;
+}
+
+.ptitle1 {
+    font-family: verdana;
+    font-size: 20px;
+    text-align: center;
+}
+
+#BanTable {
+    margin-left: 10px;
+    margin-right: 10px;
+    max-width: 700px;
+    max-height: 500px;
+    overflow: auto;
+}
+
+.bpname {
+    width: 200px;
+}
+
+.bptime {
+    width: 100px;
+}
+
+.bpreason {
+    width: 200px;
+}
+
+.PlayerControll {
+    grid-row: 2;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    background-color: white;
+}
+
+.BoxPlayerPanel {
+    margin: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 40px;
+    grid-gap: 10px;
+}

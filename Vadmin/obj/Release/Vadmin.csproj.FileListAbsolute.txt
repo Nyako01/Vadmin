@@ -3,7 +3,6 @@ C:\Users\okisu\Documents\Myproject\Fivem Server Manager\Release\Vadmin.exe.manif
 C:\Users\okisu\Documents\Myproject\Fivem Server Manager\Release\Vadmin.application
 C:\Users\okisu\Documents\Myproject\Fivem Server Manager\Release\Vadmin.exe
 C:\Users\okisu\Documents\Myproject\Fivem Server Manager\Release\Vadmin.pdb
-C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Release\Vadmin.csprojAssemblyReference.cache
 C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Release\Fivem_Server_Manager.Form1.resources
 C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Release\Fivem_Server_Manager.InstallResource.resources
 C:\Users\okisu\Documents\Vadmin\Vadmin\obj\Release\Fivem_Server_Manager.EditSchedule.resources
