@@ -19,11 +19,24 @@ var banname = [];
 var banexp = [];
 var banreason = [];
 
+var user = [];
+var pass = [];
+var lvl = [];
+var img = [];
+
+var chatid = [];
+var chatname = [];
+var chatmessage = [];
+var chattime = [];
+
+var ReportTime = [];
+var ReportAction = [];
+var ReportPlayer = [];
+var ReportReason = [];
+var Reporter = [];
+
 function GetStatusData() {
 
-    $('.ConsoleText').animate({
-        scrollTop: $('.ConsoleText').get(0).scrollHeight
-    }, 500);
 
     $.ajax({
         post: 'GET',
@@ -190,6 +203,9 @@ function GetStatusData() {
         }
     });
 
+
+
+
     var action = $('.ActionSelect').find(":selected").text()
         //console.log(action);
 
@@ -247,8 +263,9 @@ function GetStatusData() {
             url: webAPI + '/api/Player/2',
             // dataType: 'json',
             success: function(data) {
-                Name = data;
-                $(".TableON").empty();
+
+
+
                 $(".PlayerSelect").empty();
                 $.each(data, function(index, val) {
                     $(".TableON").append("<p>" + val + "</p>");
@@ -256,6 +273,8 @@ function GetStatusData() {
                     //console.log(name.lenght);
 
                 });
+
+                Name = data;
             }
         });
 
@@ -314,6 +333,147 @@ function GetStatusData() {
         $(".Btabledata").append("<tr><td>" + banname[i] + "</td><td>" + banexp[i] + "</td><td>" + banreason[i] + "</td></tr>");
 
     }
+
+    $.ajax({
+        post: 'GET',
+        url: webAPI + '/api/Login/1',
+        // dataType: 'json',
+        success: function(data) {
+            user = data;
+
+        }
+    });
+
+    $.ajax({
+        post: 'GET',
+        url: webAPI + '/api/Login/2',
+        // dataType: 'json',
+        success: function(data) {
+            pass = data;
+        }
+    });
+
+    $.ajax({
+        post: 'GET',
+        url: webAPI + '/api/Login/3',
+        // dataType: 'json',
+        success: function(data) {
+            lvl = data;
+        }
+    });
+
+    $.ajax({
+        post: 'GET',
+        url: webAPI + '/api/Login/4',
+        // dataType: 'json',
+        success: function(data) {
+            img = data;
+        }
+    });
+
+    // $.ajax({
+    //     post: 'GET',
+    //     url: webAPI + '/api/Chat/4',
+    //     // dataType: 'json',
+    //     success: function(data) {
+    //         chattime = data;
+    //     }
+    // });
+
+    // $.ajax({
+    //     post: 'GET',
+    //     url: webAPI + '/api/Chat/1',
+    //     // dataType: 'json',
+    //     success: function(data) {
+    //         chatid = data;
+    //     }
+    // });
+
+    // $.ajax({
+    //     post: 'GET',
+    //     url: webAPI + '/api/Chat/2',
+    //     // dataType: 'json',
+    //     success: function(data) {
+    //         chatname = data;
+    //     }
+    // });
+
+    // $.ajax({
+    //     post: 'GET',
+    //     url: webAPI + '/api/Chat/3',
+    //     // dataType: 'json',
+    //     success: function(data) {
+
+    //         chatmessage = data;
+    //     }
+    // });
+
+    // $(".ChatText").empty();
+    // for (var i = 0; i < chatid.length; i++) {
+    //     $(".ChatText").append("<p>" + chattime[i] + " (" + chatid[i] + ")" + chatname[i] + " = " + chatmessage[i] + "</p>")
+    // }
+
+    // $.ajax({
+    //     post: 'GET',
+    //     url: webAPI + '/api/Report/1',
+    //     // dataType: 'json',
+    //     success: function(data) {
+    //         ReportAction = data;
+    //     }
+    // });
+
+    // $.ajax({
+    //     post: 'GET',
+    //     url: webAPI + '/api/Report/2',
+    //     // dataType: 'json',
+    //     success: function(data) {
+    //         ReportPlayer = data;
+    //     }
+    // });
+
+    // $.ajax({
+    //     post: 'GET',
+    //     url: webAPI + '/api/Report/3',
+    //     // dataType: 'json',
+    //     success: function(data) {
+
+    //         ReportReason = data;
+    //     }
+    // });
+
+    // $.ajax({
+    //     post: 'GET',
+    //     url: webAPI + '/api/Report/4',
+    //     // dataType: 'json',
+    //     success: function(data) {
+
+    //         ReportTime = data;
+    //     }
+    // });
+
+    // $.ajax({
+    //     post: 'GET',
+    //     url: webAPI + '/api/Report/5',
+    //     // dataType: 'json',
+    //     success: function(data) {
+
+    //         Reporter = data;
+    //     }
+    // });
+
+
+    // $(".ReportText").empty();
+    // for (var i = 0; i < ReportAction.length; i++) {
+    //     if (ReportAction[i] == "Ban") {
+    //         $(".ReportText").append("<p>" + ReportTime[i] + " <b><font color=\"green\">" + Reporter[i] + "</font></b> Request to Ban <b><font color=\"red\">" + ReportPlayer[i] + "</font></b> with Reason <i>" + ReportReason[i] + "</i></p>")
+    //     }
+    //     if (ReportAction[i] == "Error") {
+    //         $(".ReportText").append("<p>" + ReportTime[i] + " <b><font color=\"green\">" + Reporter[i] + "</font></b> Report a Error with Reason <i>" + ReportReason[i] + "</i></p>")
+    //     }
+    //     if (ReportAction[i] == "Bug") {
+    //         $(".ReportText").append("<p>" + ReportTime[i] + " <b><font color=\"green\">" + Reporter[i] + "</font></b> Report a Bug with Reason <i>" + ReportReason[i] + "</i></p>")
+    //     }
+    // }
 
 }
 
@@ -697,6 +857,29 @@ $(document).ready(function() {
 
     })
 
+    $(".SendChat").click(function() {
+        //alert("This Function not Available");
+        var input = $("#InputChat").val();
+
+        var usr = $(".Username").text();
+        var lv = $(".Userlevel").text();
+        var chat = "say [" + usr + " - " + lv + "] " + input;
+        console.log(chat);
+        var data = {
+            ID: "2",
+            ConsoleOUT: chat
+
+        };
+        $.ajax({
+            type: 'POST',
+            url: webAPI + '/api/Console/',
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json"
+        });
+
+    })
+
     $(".PlayerSelect").click(function() {
         $(".PlayerSelect").empty();
         $.each(Name, function(index, val) {
@@ -718,12 +901,63 @@ $(document).ready(function() {
         })
     })
 
+    if (Cookies.get('loginstate') == '1') {
+
+        console.log(Cookies.get('loginstate'));
+        console.log(Cookies.get('userlogin'));
+        console.log(Cookies.get('lvllogin'));
+        console.log(Cookies.get('imglogin'));
+        $(".Username").text(Cookies.get('userlogin'));
+        $(".Userlevel").text(Cookies.get('lvllogin'));
+        if (Cookies.get('imglogin') != "") {
+            $(".imgProfile").attr({ "src": "WebRemote/img/" + Cookies.get('imglogin') });
+        }
+        $(".login").hide();
+        $("#Main").show();
+    }
+
+    $(".Logout").click(function() {
+        Cookies.set('loginstate', '0');
+        $(".login").show();
+        $("#Main").hide();
+    })
+
+    $(".loginbutton").click(function() {
+
+        var User = $(".userlogin").val();
+        var Pass = $(".passlogin").val();
+        console.log(User + "," + Pass);
+
+        var ul = user.length;
+
+        for (i = 0; i < ul; i++) {
+            //console.log(user[i] + "," + pass[i]);
+            if (user[i] == User && pass[i] == Pass && User.length > 0 && Pass.length > 0) {
+                ul = i;
+                Cookies.set('loginstate', '1');
+                Cookies.set('userlogin', user[i]);
+                Cookies.set('lvllogin', lvl[i]);
+                Cookies.set('imglogin', img[i]);
+                $(".Username").text(user[i]);
+                $(".Userlevel").text(lvl[i]);
+                if (img[i] != "") {
+                    $(".imgProfile").attr({ "src": "WebRemote/img/" + img[i] });
+                }
+                $(".login").hide();
+                $("#Main").show();
+            } else {
+                $(".login").css("height", "280px");
+                $(".failLogin").text("Login Failed. Username or Password is incorrect")
+            }
+        }
+    })
+
     $(".dashboard").click(function() {
         $("#StatusPanel").show();
         $("#PlayerList").hide();
         $("#Console").hide();
-        $("#ResourceManager").hide();
-        $("#UserManager").hide();
+        $("#chat").hide();
+        $("#Report").hide();
 
     });
 
@@ -731,16 +965,40 @@ $(document).ready(function() {
         $("#StatusPanel").hide();
         $("#PlayerList").show();
         $("#Console").hide();
-        $("#ResourceManager").hide();
-        $("#UserManager").hide();
+        $("#chat").hide();
+        $("#Report").hide();
     });
 
     $(".console").click(function() {
         $("#StatusPanel").hide();
         $("#PlayerList").hide();
         $("#Console").show();
-        $("#ResourceManager").hide();
-        $("#UserManager").hide();
+        $("#chat").hide();
+        $("#Report").hide();
+        $('.ConsoleText').animate({
+            scrollTop: $('.ConsoleText').get(0).scrollHeight
+        }, 500);
     });
 
+    $(".chat").click(function() {
+        $("#StatusPanel").hide();
+        $("#PlayerList").hide();
+        $("#Console").hide();
+        $("#chat").show();
+        $("#Report").hide();
+        $('.ConsoleText').animate({
+            scrollTop: $('.ChatText').get(0).scrollHeight
+        }, 500);
+    });
+
+    $(".notif").click(function() {
+        $("#StatusPanel").hide();
+        $("#PlayerList").hide();
+        $("#Console").hide();
+        $("#chat").hide();
+        $("#Report").show();
+        $('.ConsoleText').animate({
+            scrollTop: $('.NotifText').get(0).scrollHeight
+        }, 500);
+    });
 });

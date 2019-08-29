@@ -10,7 +10,7 @@
     font-family: verdana;
     font-size: 13px;
     max-width: 100%;
-    max-height: 100%;
+    max-height: 90%;
     white-space: nowrap;
     overflow: auto;
 }
@@ -23,7 +23,7 @@
     display: flex;
 }
 
-#InputConsole {
+.input {
     left: 1%;
     top: 10%;
     position: relative;
@@ -31,7 +31,7 @@
     width: 90%;
 }
 
-.SendConsole {
+#SendButton {
     left: 1%;
     position: relative;
     width: 7%;
